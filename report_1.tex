@@ -1,0 +1,571 @@
+
+
+\documentclass{jsarticle}
+
+
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{float}
+\usepackage[truedimen, margin=25mm]{geometry}
+\usepackage{url}
+\usepackage{listings}
+
+\setcounter{section}{-1}
+
+\begin{document}
+
+\def\lstlistingname{ソースコード}
+
+\lstset{
+language={C},
+numbers=left
+}
+
+
+\title{レポート課題No.1}
+\author{川口廣伊智 \\ 学籍番号:051715223}
+\date{2017/06/06}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{レポートについての注意}
+
+\subsection{各課題の解答の構成について}
+まず課題の解釈をし、解答するためのプログラム(の一部)を記載した。次に得られた結果をグラフにして記載した。
+考察すべき内容があった場合は簡単な考察も付けた。すべての課題に考察がついているわけではない。
+
+
+\subsection{プログラムについて}
+各課題についてその計算を行うための本質的な部分のプログラムを抜粋して記載しているが、抜粋であるため
+プログラムの全体像が見えず理解しづらい可能性がある。分かりやすくするため配慮はしているが、その点は留意されたい。
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{基本課題EX0-1}
+
+\subsection{課題概要}
+fibonacci数列を求める問題。60番目まで求めればいいので$O(n)$のアルゴリズムのプログラムによって計算した。
+以下は整数$n$を受け取り$n番目の$fibonacci数列をdouble型で返す関数のプログラムである。
+
+
+\begin{lstlisting}[basicstyle=\ttfamily, frame=single, caption=fibonacci数列を計算する関数]
+double fibonacci(int n){  
+  double answer, temp_1, temp_2;
+  int i;
+  temp_1 = 1.0;
+  temp_2 = 0.0;
+  if(n == 0){
+    answer = 0; 
+  }else if(n == 1){
+    answer = 1;  
+  }else{
+    for(i = 1;i < n;i++){
+      answer = temp_1 + temp_2;
+      temp_2 = temp_1; 
+      temp_1 = answer;  
+    }
+  }
+  return answer;  /* output the nth of fibonacci series */
+}
+\end{lstlisting}
+
+
+\subsection{結果}
+fibonacci数列の20、30、40、50、60番目を計算した結果を表にまとめた。
+
+
+\begin{table}[H]
+ \begin{center}
+  \caption{fibonacci数列の値}
+  \begin{tabular}{|c|r|}
+   \hline
+   $n$ & $a_n$    \\ 
+   \hline \hline
+   20 & 6765 \\
+   \hline
+   30 & 832040 \\
+   \hline
+   40 & 102334155 \\
+   \hline
+   50 & 12586269025 \\
+   \hline
+   60 & 1548008755920 \\
+   \hline
+  \end{tabular}
+ \end{center}
+\end{table}
+
+
+
+\subsection{考察}
+
+fibonacci数列を計算するアルゴリズムはいくつかあるが、ここでは配列または単純な繰り返しを用いたもの、再帰計算によるもの、行列計算を用いたもの
+の3種類のアルゴリズムについて簡単に考察する。また以下のような考察により今回fibonacci数列を得るのに使用すべきアルゴリズムは単純な繰り返しを用いたものであったと思われる。
+単純ですぐプログラムが作れるうえ、$n=60$程度なら時間もかからないからだ。
+
+
+\subsubsection{配列または単純な繰り返しを用いたアルゴリズム}
+$まず配列を用いたアルゴリズムについて。これは最も単純なアルゴリズムでa_nを求めるために配列a[n]を用意する。
+a[0] = 0、a[1] = 1を与えておき、n=2から順にa[n] = a[n-1] + a[n-2]の計算を繰り返すことでa[n]、すなわちa_nを得ることが出来る。
+nに関するループが一つなので時間計算量はO(n)である。一方、長さnの配列を用いるので空間計算量がO(n)と割を食う。空間計算量に関しては
+配列を用いずにソートをうまく取り入れることによりO(1)と抑えることが出来る。$
+
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=14cm]{ex0/fibonacci_ite.eps}
+ \caption{単純な繰り返しを用いた場合のn番目のfibonacci数列を計算するのにかかった時間のグラフ。
+ 横軸がn番目、縦軸はそのn番目の数列を計算するのにかかった時間を表している。時間計算量が$O(n)$であること分かる。}
+ \end{center}
+\end{figure}
+
+\subsubsection{再帰計算を用いたアルゴリズム}
+
+$次に再帰計算を用いたアルゴリズムについて。アルゴリズムはn \geq 2について、nを引数としてa_{n-1} + a_{n-2}を返すような関数を用意し、この関数の中で
+また関数が呼び出されるという再帰的な構造を持っている。この構造のため、同一の計算が複数回行われ、
+時間計算量はO(\alpha^n)である。(\alpha > 1、具体的には\alpha = 1.618である。)nのべき乗のオーダーなのでnが大きい計算を行うときにこのアルゴリズムは使用するべきではない。$
+
+
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=14cm]{ex0/fibonacci_rec.eps}
+ \caption{再帰計算を用いた場合のn番目のfibonacci数列を計算するのにかかった時間のグラフ。
+ 横軸がn番目、縦軸はそのn番目の数列を計算するのにかかった時間を表していて対数表示されている。時間計算量が$O(\alpha^n)、(\alpha > 1)$であることが分かる。}
+ \end{center}
+\end{figure}
+
+この結果から分かるように$n=60$を求めるのにさえおよそ一万秒かかることが分かる。そのため今回の課題でこのアルゴリズムは使うべきでない。
+
+
+\subsubsection{行列計算を用いたアルゴリズム}
+
+最後に行列計算を用いたアルゴリズムについて。まず、ベクトル
+$ v_k = \begin{pmatrix} a_{k + 1} \\ a_k \end{pmatrix} 
+と行列
+Q = \begin{pmatrix} 1 & 1 \\ 1 & 0 \end{pmatrix} 
+を用意する。これより直ちにv_{k+1} = Qv_k
+であることがわかる。すなわちv_{n+1} = Q^{n}v_0である。
+なのでa_nを計算するためにはQ^nを計算しv_0 = \begin{pmatrix} 1 \\ 0 \end{pmatrix} に作用させて
+得られたベクトルの第2成分を見ればよい。$
+このアルゴリズムの本質はfibonacci数列を計算するのに$Q^n$の計算に帰着できるところである。この計算では素直にQをn回かけることはなくQの性質
+を利用して計算量を大幅に減らすことが出来る。結局、時間計算量は$O(\log n)$である。
+計算コストの面では良いアルゴリズムだがソースコードから作るとなるとやや複雑で面倒だと個人的に思う。
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\section{基本課題EX1-1}
+
+\subsection{課題概要}
+与えられた関数の微分係数を2点差分法、3点差分法のアルゴリズムを用いて計算し、得られた値と真値との誤差の振る舞いを調べる課題であった。
+刻み幅を小さくとればとるほど誤差が小さくなる結果が期待される。
+
+次のプログラムは関数(今回の場合$ \sin{x}$)と、ある値(今回の場合$0.3 \pi $)と、刻み幅を受け取る。そして、その関数のその値での微分係数を与えられた
+刻み幅で2点差分により求め、出力する関数である。関数は引数として受け取ってない。
+
+\begin{lstlisting}[basicstyle=\ttfamily, frame=single, caption=2点差分法]
+double differentiation(double x, double h){
+
+	return (func(x + h) - func(x)) / h;
+}
+\end{lstlisting}
+
+その3点差分の場合である。
+
+\begin{lstlisting}[basicstyle=\ttfamily, frame=single, caption=3点差分法]
+double differentiation(double x, double h){
+
+	return (func(x + h) - func(x - h)) / (2 * h);
+}
+\end{lstlisting}
+
+
+
+\subsection{結果}
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=16cm]{ex1/two_point.eps}
+ \caption{$h=10^{-8}$ぐらいまでは誤差が$O(h)$であることが分かる。}
+ \end{center}
+\end{figure}
+
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=16cm]{ex1/three_point.eps}
+ \caption{$h=10^{-5}$ぐらいまでは誤差が$O(h^2)$であることが分かる。}
+ \end{center}
+\end{figure}
+
+
+
+
+
+
+
+\subsection{考察}
+
+
+\subsubsection{誤差の振る舞いについて}
+$h$を小さくしていったときに二点差分の計算結果では$h=10^{-8}$、三点差分の計算結果では$h=10^{-5}$の前後で誤差の振る舞いが変化している。
+この結果について少し考察する。二点差分、三点差分のいずれも同じ根拠に基づいているので二点差分についてのみ考えれば十分である。
+まず、刻み幅が$h=10^{-8}$より大きい範囲での誤差の振る舞いについて。この範囲では打切り誤差が全体の誤差のリーディングオーダーになっており
+二点差分の場合、打切り誤差のオーダーは$O(h)$であり結局これが全体としての誤差のオーダーとなる。
+一方、刻み幅が$h=10^{-8}$より小さい範囲での誤差の振る舞いについて。この範囲ではうって変わって桁落ち誤差が全体の誤差のリーディングオーダーとなる。
+桁落ち誤差とは今回の場合、$h$を小さくとればとるほど$f(x+h)とf(x)$の差が小さくなり、上位桁が次々一致していき、この差をとることで有効桁数が減ってしまうことによる誤差を指す。
+このため、刻み幅を小さくとればとるほど計算の精度が上がるかと思いきやそうでもないのである。二次方程式の解を求める際にも同様の桁落ち誤差が生じるがこのときには
+うまく対処する方法が存在する。しかし今回のように微分係数を差分で近似する際にはうまい対処法があるのだろうか？
+%打切り誤差と桁落ちのため
+
+
+
+\section{基本課題EX1-2}
+
+\subsection{課題概要}
+Newton法により$\sqrt[3]{10}$を計算する課題である。解答は初期値を$x=3.0$にして方程式$x^3-10=0$を解く
+ことで$\sqrt[3]{10}$を求めるようになっている。そのためのプログラムは次のようである。
+
+\begin{lstlisting}[basicstyle=\ttfamily, frame=single, caption=ニュートン法]
+#include <stdio.h>
+#include <math.h>
+
+#define EPS pow(10.0,-15)
+#define KMAX 100
+
+double func(double x); //関数
+double derf(double x); //その導関数
+
+int main()
+{
+  int k=1;
+  double x, d;
+  x = 3.0;
+  printf("%d %20.15lf\n", 0, x - 2.154434690031884); //初期の真値との差を出力
+  do{
+    d = -func(x) / derf(x);
+    x = x + d;
+    printf("%d %20.15lf\n", k, x - 2.154434690031884); //反復回数と真値との差をループ毎に出力
+    k++;
+  }while( fabs(d) > EPS && k < KMAX); //このように条件づけることでループが終わらなくなること防ぐ
+
+  if( k == KMAX ){
+    printf("The answer could not be found.\n" );
+  }
+  return 0; 
+}
+
+double func( double x){
+  return ( pow(x, 3.0) - 10.0 );
+}
+double derf(double x){
+  return( 3.0 * pow(x, 2.0) );
+}
+\end{lstlisting}
+
+
+\subsection{結果}
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=16cm]{ex1/newton.eps}
+ \caption{ニュートン法による$\sqrt[3]{10}$の計算値と真値との差の反復回数による変化。反復を重ねるごとに誤差がだいたい
+ $10^{0}、10^{-1}、10^{-2}、10^{-4}、10^{-8}$となっており、二次収束であることが分かる。}
+ \end{center}
+\end{figure}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+\section{基本課題EX2-1}
+
+\subsection{課題概要}
+
+Euler法によって与えられたパラメータ、初期条件での減衰振動の解を計算する課題である。
+次のプログラムは加速度の関数func()、時間t、位置x[1]、速度x[2]、 刻み幅hを受け取りEuler法を実行し
+次のステップの位置と速度を計算する関数eulerと、実際の減衰振動の場合の位置微分と速度微分を計算する
+関数である。euler関数でfuncとしてこのdampedなどの関数を引数として受け取る。
+
+
+
+\begin{lstlisting}[basicstyle=\ttfamily, frame=single, caption=Euler法]
+void euler(void (*func)(), double t, double x[], double h)
+{
+  double k1[N];
+  func(k1, t, x); //この関数を通してｋ１を計算する
+  x[0] = x[0] + h * k1[0]; //次のステップの位置の値を計算
+  x[1] = x[1] + h * k1[1]; //次のステップの速度の値を計算
+}
+
+void damped(double k[], double t, double x[])
+{
+  double spring_const = 2.0;
+  double kappa = 0.2;
+
+  k[0] = x[1];
+  k[1] = -spring_const * x[0] - kappa * x[1];
+}
+\end{lstlisting}
+
+また、精度の比較のため理論値を求めないわけにはいかない。が、うまく計算が出来ずグラフに参照線として描いてある理論線はおそらく正しいものではない。
+しかし、真の解ともそれほどずれてもいないなはずなので収束すべき対象として描くことにした。
+
+\subsection{結果}
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=16cm]{ex2/euler.eps}
+ \caption{Euler法によって計算した減衰振動の解。刻み幅を小さくとればとるほど理論値に近づいていく様子が分かる。}
+ \end{center}
+\end{figure}
+
+
+\subsection{考察}
+
+\subsubsection{誤差の振る舞いについて}
+Euler法で計算した減衰振動の30秒後の位置の値の誤差が刻み幅の大きい領域で$O(h)$で振舞わないことが分かった。
+これは刻み幅が大きいとテイラー展開が大雑把になり、しかも真の解が振動的であるため誤差のたまり方が悪い場合があり$O(h)$に
+"見えなくなる"ためであろう。
+一方、刻み幅が小さい領域では誤差は$O(h)$で振舞っていた。
+また別途、自由落下に対しても何秒後かの位置の値の精度を調べた。この時は
+誤差はぴったり$O(h)$で振舞った。他の単調増加する解が得られる場合でも私が調べた範囲ではhが大きい領域でも
+$O(h)$で振舞っていた。
+
+結論としては、テイラー展開の打切り誤差は$O(h^2)$だが振動する解を数値計算する場合は
+刻み幅が大きいと誤差の積もり方が悪く全体としての誤差が$O(h)$に振舞っているように見えないということだ。
+
+
+
+
+\section{基本課題EX2-2}
+
+\subsection{課題概要}
+課題2-1で行った計算を中点法、4次のRunge-Kutta法でも同様に行う課題。
+次のプログラムはEuler法、Euler法のプログラムと同様の構造をしており、4次のRunge-Kutta法により次のステップの位置と速度を計算する関数である。
+
+
+\begin{lstlisting}[basicstyle=\ttfamily, frame=single, caption=中点法]
+void mid_point(void (*func)(), double t, double x[], double h)
+{
+  double k1[N], k2[N], k3[N], k4[N], f[N];
+  func(k1, t, x);
+  f[0]=x[0] + h * k1[0] / 2.0;
+  f[1]=x[1] + h * k1[1] / 2.0;
+  func(k2, t + h / 2.0, f);
+  x[0] = x[0] + h * k2[0];
+  x[1] = x[1] + h * k2[1];
+}
+\end{lstlisting}
+
+
+次のプログラムはEuler法、中点法のプログラムと同様の構造をしており、4次のRunge-Kutta法により次のステップの位置と速度を計算する関数である。
+
+\begin{lstlisting}[basicstyle=\ttfamily, frame=single, caption=4次のRunge-Kutta法]
+void rk4(void (*func)(), double t, double x[], double h)
+{
+  double k1[N],k2[N],k3[N],k4[N],f[N];
+  func(k1, t, x);
+  f[0]=x[0] + h * k1[0] / 2.0;
+  f[1]=x[1] + h * k1[1] / 2.0;
+  func(k2, t + h / 2.0, f);
+  f[0]=x[0] + h * k2[0] / 2.0;
+  f[1]=x[1] + h * k2[1] / 2.0;
+  func(k3,t + h / 2.0, f);
+  f[0]=x[0] + h * k3[0]; 
+  f[1]=x[1] + h * k3[1];
+  func(k4, t + h, f);
+  x[0] = x[0] + h / 6.0 * (k1[0] + 2.0 * k2[0] + 2.0 * k3[0] + k4[0]);
+  x[1] = x[1] + h / 6.0 * (k1[1] + 2.0 * k2[1] + 2.0 * k3[1] + k4[1]);
+}
+\end{lstlisting}
+
+
+\subsection{結果}
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=16cm]{ex2/mid_point.eps}
+ \caption{中点法によって計算された減衰振動の解。Euler法に比べて早く理論解に収束していることが分かる。}
+ \end{center}
+\end{figure}
+
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=16cm]{ex2/runge.eps}
+ \caption{4次のRunge-Kutta法によって計算された減衰振動の解。Euler法、中点法に比べてもより早く理論解に収束している。}
+ \end{center}
+\end{figure}
+
+
+\section{基本課題EX2-3}
+
+\subsection{課題概要}
+
+摩擦がない場合の全エネルギーの時間変化をEuler法、Runge-Kutta法、Symplectic法でエネルギーを計算してそれぞれ求めた。
+次のプログラムは課題2-2の中点法などで行ったのと同様にSymplectic法により次のステップの位置と速度を計算する関数である。
+
+
+\begin{lstlisting}[basicstyle=\ttfamily, frame=single, caption=4次のRunge-Kutta法]
+void symplectic(void (*func)(), double t, double x[], double h)
+{
+  double k1[N];
+  func(k1, t, x);
+  x[0] = x[0] + h * x[1];
+  x[1] = x[1] - h * 2.0 * x[0];
+}
+\end{lstlisting}
+
+
+
+
+
+\subsection{結果}
+
+二つのプロットを載せているが一つは30秒までのエネルギーの時間変化をEuler法、4次のRunge-Kutta法、Symplectic法で計算したものを
+重ねてプロットしている。もう一つは$10^6$秒までのエネルギーの時間変化を4次のRunge-Kutta法、Symplectic法で計算したものを
+重ねてプロットしている。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=16cm]{ex2/energy_1.eps}
+ \caption{Euler法、4次のRunge-Kutta法、Symplectic法によって計算されたエネルギーの時間変化。時間の刻み幅は0.1sec。Euler法によって計算されたエネルギーは
+ 早い段階で理論値から遠ざかるが、Runge-Kutta法によるものはこの時間範囲では理論値と一致しているように見える。Symplectic法によるものは
+ 理論値の周りで振動している。}
+ \end{center}
+\end{figure}
+
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=16cm]{ex2/energy_2.eps}
+ \caption{4次のRunge-Kutta法とSymplectic数値積分法によって計算されたエネルギーの時間変化。時間の刻み幅は0.1sec。Runge-Kutta法によって計算された
+ エネルギーは長時間たつとやがて減少していく様子が見られる。一方、Symplectic数値積分法によるものは時間がいくらたっても理論値の周りを振動しているだけである。}
+ \end{center}
+\end{figure}
+
+
+
+
+
+
+
+\subsection{考察}
+
+
+今回用いたEuler法、4次のRunge-Kutta法、Symplectic数値積分法のいずれもエネルギーの振る舞いが異なっていて興味深く、かつ講義でも
+詳しく触れられなかったのでここで少し考察を試みる。ただし課題で与えられたパラメータを変えて(無次元化して)ハミルトニアンを
+\begin{equation*}
+H = \frac{1}{2} p^2 + \frac{1}{2} q^2
+\end{equation*}
+
+と書くことにする。これより、運動方程式は
+
+\begin{equation*}
+\begin{cases}
+\dot{p} = -q \\
+\dot{q} = p
+\end{cases}
+\end{equation*}
+となる。
+
+\subsubsection{Euler法におけるエネルギーの時間変化}
+Euler法の場合、$n+1ステップ目の(p_{n+1}, q_{n+1})、 nステップ目の(p_n, q_n)$の関係は行列で表すと
+
+\begin{equation*}
+\begin{pmatrix} p_{n+1} \\ q_{n+1} \end{pmatrix} =  \begin{pmatrix} 1 & -\Delta t \\   \Delta t & 1  \end{pmatrix} \begin{pmatrix} p_{n} \\ q_{n} \end{pmatrix}
+\end{equation*}
+
+となる。ただし$ \Delta t  $は1ステップの時間間隔を表す。
+この時の1ステップでの時間発展行列を
+\begin{equation*}
+T = \begin{pmatrix} 1 & -\Delta t \\   \Delta t & 1  \end{pmatrix}
+\end{equation*}
+と表す。$nステップ目のエネルギーをE_nとすると$
+
+\begin{equation*}
+E_{n} = \frac{1}{2} (p_{n}^2 + q_{n}^2) = \frac{1}{2} \begin{pmatrix} p_n & q_n \end{pmatrix} \begin{pmatrix} p_n \\ q_n \end{pmatrix}
+\end{equation*}
+なので
+\begin{align}
+E_{n+1} = \frac{1}{2} (p_{n+1}^2 + q_{n+1}^2 &=  \frac{1}{2}  \begin{pmatrix} p_n & q_n \end{pmatrix} T^{t} T \begin{pmatrix} p_n \\ q_n \end{pmatrix}  \notag \\
+  &= \frac{1}{2} \begin{pmatrix} p_n & q_n \end{pmatrix} \begin{pmatrix} 1 + (\Delta t)^2 & 0 \\   0 & 1 + (\Delta t)^2  \end{pmatrix} \begin{pmatrix} p_n \\ q_n \end{pmatrix}  \notag \\
+  &= E_n (1 + (\Delta t)^2) \notag
+\end{align}
+となることが分かる。これより
+
+\begin{equation*}
+E_n = E_0 (1 + (\Delta t)^2)^n
+\end{equation*}
+なのでEuler法の場合はエネルギーが指数関数的に増加していくことが理解できる。
+
+
+\subsubsection{4次のRunge-Kutta法におけるエネルギーの時間変化}
+Euler法と同様の考察から4次のRunge-Kutta法の場合の時間発展行列は
+
+\begin{equation*}
+T = \begin{pmatrix} 1 - \frac{1}{2}(\Delta t)^2  + \frac{1}{24}(\Delta t)^4 & -\Delta t + \frac{1}{6}(\Delta t)^3 \\
+   \Delta t - \frac{1}{6}(\Delta t)^3 & 1 - \frac{1}{2}(\Delta t)^2 + \frac{1}{24}(\Delta t)^4  \end{pmatrix}
+\end{equation*}
+と求めることが出来る。ゆえに
+
+\begin{equation*}
+E_{n+1} = E_n (1 - \frac{1}{72}(\Delta t)^6 +  \frac{1}{576}(\Delta t)^8) 
+\end{equation*}
+となることが分かる。なので
+
+\begin{equation*}
+E_{n} = E_0 (1 - \frac{1}{72}(\Delta t)^6 +  \frac{1}{576}(\Delta t)^8)^n
+\end{equation*}
+で、エネルギーが指数関数的に減少していくことが理解できる。
+
+
+\subsubsection{Symplectic数値積分法におけるエネルギーの時間変化}
+これは講義資料にも少し記述があったので簡単に。この計算方法ではエネルギーの保存は成り立たないが
+\begin{equation*}
+\frac{1}{2} p^2 + \frac{1}{2} q^2 + \frac{\Delta t}{2} pq
+\end{equation*}
+という量が保存する。つまり一般にエネルギーは$O(\Delta t)$の範囲で保存し、特に調和振動子の場合はエネルギーが$O(\Delta t)$の範囲で振動子の振動数の2倍で振動することが分かる。
+
+
+\begin{thebibliography}{9}
+
+\item
+ 増原英彦+東京大学情報教育連絡会『情報科学入門 Rubyを使って学ぶ』(東京大学出版会, 2010)
+
+
+\item
+ \url{http://www.cp.cmc.osaka-u.ac.jp/~kikuchi/texts/conservation.pdf}
+
+
+\end{thebibliography}
+
+
+
+
+\end{document}

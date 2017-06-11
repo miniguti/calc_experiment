@@ -18,7 +18,7 @@ int main(void){
 
     for (i = 0; i < 50; i++){
         h = pow(2, -i);
-        printf("%10.20lf %10.20lf\n", h, gap(x, h));
+        printf("%20.15lf %20.15lf\n", h, gap(x, h));
     }
 
 
@@ -34,7 +34,7 @@ double func(double x){
 
 double diff(double x, double h){
 
-	return (func(x + h) - func(x)) / h;
+    return (func(x + h) - func(x - h)) / (2 * h);
 }
 
 double absolute(double y){

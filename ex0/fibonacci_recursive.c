@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<time.h>
 
 int fibonacci(int n){
 	if (n == 0){
@@ -12,10 +13,18 @@ int fibonacci(int n){
 
 
 int main(void){
-	int n;
-	scanf("%d", &n);
+	int i, n, ans;
+	clock_t start, end;
+	n = 46;
+	printf("#n   process time\n");
 	
-	printf("%d", fibonacci(n));
+	for (i = 0;i<n;i++){
+		
+		start = clock();
+		ans = fibonacci(i);
+		end = clock();
+		printf("%d %lf\n", i, (end - start) / 1000.0);
+	}
 	
 	return 0;
 }
