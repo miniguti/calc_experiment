@@ -1,0 +1,10 @@
+%handbook4_1_1
+
+\documentclass{jarticle}
+\begin{document}
+$a$’¤Î’¤Þ’¤ï’¤ê’¤Î’¥Æ’¥¤’¥é’¡¼’Å¸’³«
+\begin{equation}
+f(x) = \sum_{n = 0}^{\infty}  \frac{f^{n} (a)}{n!} (x - a)^n
+\end{equation}
+\end{document}
+

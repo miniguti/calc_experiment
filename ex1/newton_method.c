@@ -13,6 +13,7 @@ double derf(double x);
 int main()
 {
   int k=0;
+  double x_0 = 2.154434690031884;
   double x, d;
   printf("#Initial value of x\n");
   scanf("%lf", &x);
@@ -20,7 +21,7 @@ int main()
   do{
     d = -func(x)/derf(x);
     x = x + d;
-    printf("%d %20.15lf 2.154434690031884\n", k, x);
+    printf("%d %20.15lf \n", k, x - x_0);
     k++;
   }while( fabs(d) > EPS && k < KMAX); 
 
@@ -34,5 +35,5 @@ double func( double x){
   return ( pow(x, 3.0) - 10.0 );
 }
 double derf(double x){
-  return( pow(x, 3.0) );
+  return( 3 * pow(x, 2.0) );
 }

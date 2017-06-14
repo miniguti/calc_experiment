@@ -1,0 +1,16 @@
+
+\deocumentclass{jarticle}
+\usepackage{graphics}
+
+\begin{document}
+
+\begin{figure}
+  \begin{center}
+    \resizebox{60mm}{!}{\includegraphics{sin.eps}}
+    \caption{sin function}
+  \end{center}
+\end{figure}
+
+
+
+\end{document}
