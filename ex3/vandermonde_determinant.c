@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
   int i, m, n;
   double **a;
   double *b;
-  double determinant = 1.0;;
+  double determinant = 1.0;
   
 
   int *ipiv;
