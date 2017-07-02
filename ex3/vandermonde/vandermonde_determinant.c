@@ -61,9 +61,13 @@ int main(int argc, char** argv) {
   printf("Pivot for LU decomposition:\n");
   fprint_ivector(stdout, n, ipiv);
 
+  
+  /* calculate the determinant of given a[][] */
   for(i=0;i<n;i++){
     determinant = determinant * a[i][i];
   }
+
+  /* output the value of determinant */
   printf("determinant is %lf\n", determinant);
 
 

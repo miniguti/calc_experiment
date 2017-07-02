@@ -13,7 +13,8 @@ int main(int argc, char** argv) {
   char* filename;
   FILE *fp;
 
-  int m, n;
+  int i, k, m, n;
+  double h, x, y, z;
   double **a;
   double *b;
 
@@ -44,10 +45,10 @@ int main(int argc, char** argv) {
     fprintf(stderr, "Error: inconsistent number of equations\n");
     exit(1);
   }
-  printf("Matrix A:\n");
-  fprint_dmatrix(stdout, n, n, a);
-  printf("Vector B (transposed):\n");
-  fprint_dvector(stdout, n, b);
+  //printf("Matrix A:\n");
+  //fprint_dmatrix(stdout, n, n, a);
+  //printf("Vector B (transposed):\n");
+  //fprint_dvector(stdout, n, b);
 
   /* perform LU decomposition */
   ipiv = alloc_ivector(n);
@@ -56,10 +57,10 @@ int main(int argc, char** argv) {
     fprintf(stderr, "Error: LAPACK::dgetrf failed\n");
     exit(1);
   }
-  printf("Result of LU decomposition:\n");
-  fprint_dmatrix(stdout, n, n, a);
-  printf("Pivot for LU decomposition:\n");
-  fprint_ivector(stdout, n, ipiv);
+  //printf("Result of LU decomposition:\n");
+  //fprint_dmatrix(stdout, n, n, a);
+  //printf("Pivot for LU decomposition:\n");
+  //fprint_ivector(stdout, n, ipiv);
 
   /* solve equations */
   dgetrs_(&trans, &n, &nrhs, &a[0][0], &n, &ipiv[0], &b[0], &n, &info);
@@ -67,9 +68,22 @@ int main(int argc, char** argv) {
     fprintf(stderr, "Error: LAPACK::dgetrs failed\n");
     exit(1);
   }
-  printf("Solution X (transposed):\n");
-  fprint_dvector(stdout, n, b);
-  
+  //printf("Solution X (transposed):\n");
+  //fprint_dvector(stdout, n, b);
+	n = 20; //nçƒíËã`
+	h = 1.0/n;
+	for(k=0;k<=n;k++){
+		for(i=0;i<=n;i++){
+			x = h*i;
+			y = h*k;
+			z = b[k*(n+1) + i];
+			printf("%lf %lf %lf\n", x, y, z);
+		}
+	}
+	
+			
+			
+			
   free_dmatrix(a);
   free_dvector(b);
   free_ivector(ipiv);

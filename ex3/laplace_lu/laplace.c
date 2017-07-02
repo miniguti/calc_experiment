@@ -1,5 +1,7 @@
 //laplace方程式の行列Aとベクトルbを計算
 
+#include"matrix_util.h"
+
 #include<stdio.h>
 #include<math.h>
 
@@ -8,15 +10,18 @@ int main(void){
 	int i, j, k, l, m, n;
 	double h;
 	
-	n = 4;  //x, yをm等分する。
+	n = 20;  //x, yをm等分する。
 	
-	m = n*n + 2*n; //格子の数
+	m = n*n + 2*n; //格子点の数-1
 	
 	h = 1.0 / n; //刻み幅的な
 	
+	double  **a;
 	
+	a = alloc_dmatrix(m+1, m+1);
 	
-	int a[m+1][m+1];
+		
+	//int a[m+1][m+1];
 	double b[m+1];
 	
 	//行列Aの計算
@@ -47,7 +52,7 @@ int main(void){
 				a[k*(n+1)][l*(n+1)] = 1;
 				a[k*(n+1) + n][l*(n+1) + n] = 1;
 				for(i=1;i<=n-1;i++){
-					a[k*(n+1) + i][l*(n+1) + i] = -2;
+					a[k*(n+1) + i][l*(n+1) + i] = -4;
 					a[k*(n+1) + i][l*(n+1) + i+1] = 1;
 					a[k*(n+1) + i][l*(n+1) + i-1] = 1;
 				}
@@ -71,9 +76,9 @@ int main(void){
 	for (i = 0;i <= m;i++){
 		for (j = 0;j <= m;j++){
 			if(j <= m - 1){
-				printf("%d ", a[i][j]);
+				printf("%lf ", a[i][j]);
 			}else{
-				printf("%d\n", a[i][j]);
+				printf("%lf\n", a[i][j]);
 			}
 		}
 	}
@@ -91,11 +96,15 @@ int main(void){
 	
 	
 	//ベクトルbの出力
-	printf("%d %d\n", m+1, m+1); //サイズの出力
+	printf("%d\n", m+1, m+1); //サイズの出力
 	for (i=0;i<=m;i++){
 		printf("%lf\n", b[i]);
 	}
+	
+	
+	free_dmatrix(a);
 
+	
 	return 0;
 }
 
