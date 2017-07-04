@@ -16,9 +16,9 @@ int main(int argc, char** argv) {
   FILE *fp;
   int i, j, k;
 
-  int m, n, r;
-  double **a, **u, **vt;
-  double *s;
+  int m, n, r, c, d;
+  double **a, **y, **u, **ut, **v, **vt, **temp, **god;
+  double *s, *w;
 
   int lwork;
   double *work;
@@ -39,14 +39,21 @@ int main(int argc, char** argv) {
     exit(1);
   }
   read_dmatrix(fp, &m, &n, &a);
-  printf("Matrix A:\n");
-  fprint_dmatrix(stdout, m, n, a);
+	read_dmatrix(fp, &c, &d, &y);
+  //printf("Matrix A:\n");
+  //fprint_dmatrix(stdout, m, n, a);
 
   /* allocate matrices and vectors */
   r = imin(m, n);
   u = alloc_dmatrix(m, r);
+  ut = alloc_dmatrix(r, m);
+  v = alloc_dmatrix(n, r);
   vt = alloc_dmatrix(r, n);
   s = alloc_dvector(r);
+  w = alloc_dvector(r);
+  temp = alloc_dmatrix(n, r);
+  god = alloc_dmatrix(n, m);
+  
   lwork = imax(3 * r + imax(m, n), 5 * r);
   work = alloc_dvector(lwork);
   
@@ -57,41 +64,68 @@ int main(int argc, char** argv) {
     fprintf(stderr, "Error: LAPACK::dgesvd failed\n");
     exit(1);
   }
-  printf("Result of SVD U:\n");
-  fprint_dmatrix(stdout, m, r, u);
-  printf("Result of SVD S:\n");
-  fprint_dvector(stdout, r, s);
-  printf("Result of SVD Vt:\n");
-  fprint_dmatrix(stdout, r, n, vt);
+  //printf("Result of SVD U:\n");
+  //fprint_dmatrix(stdout, m, r, u);
+  //printf("Result of SVD S:\n");
+  //fprint_dvector(stdout, r, s);
+  //printf("Result of SVD Vt:\n");
+  //fprint_dmatrix(stdout, r, n, vt);
 
-  // check the result of SVD
-  for (i = 0; i < m; ++i) {
-    for (j = 0; j < n; ++j) {
-      a[i][j] = 0.0;
-      for (k = 0; k < r; ++k) {
-        a[i][j] += u[i][k] * s[k] * vt[k][j];
-      }
+  /* untranspose matrix u and v */
+  for(i = 0;i < r;i++){
+    for(j = 0;j < m;j++){
+      ut[i][j] = u[j][i];
     }
   }
-  printf("Reconstruction of the original matrix A:\n");
-  fprint_dmatrix(stdout, m, n, a);
 
-  // approximate A by rank (r-1) matrix
-  s[r-1] = 0.0; // set the last singular value to zero
-  for (i = 0; i < m; ++i) {
-    for (j = 0; j < n; ++j) {
-      a[i][j] = 0.0;
-      for (k = 0; k < r; ++k) {
-        a[i][j] += u[i][k] * s[k] * vt[k][j];
-      }
+  for(i = 0;i < n;i++){
+    for(j = 0;j < r;j++){
+      v[i][j] = vt[j][i];
     }
   }
-  printf("Rank (r-1) approximation of A:\n");
-  fprint_dmatrix(stdout, m, n, a);
 
+
+
+  /* calculate that matrix */
+  
+	for(i = 0;i < n;i++){
+		for(j = 0;j < r;j++){
+			temp[j][i] = v[j][i] / s[i];
+		}
+	}
+	
+	for(i = 0;i < n;i++){
+		for(j = 0;j < m;j++){
+			for(k = 0;k < r;k++){
+				god[i][j] += temp[i][k] * ut[k][j];
+			}
+		}
+	}
+	
+	fprint_dmatrix(stdout, n, m, god);
+	fprint_dmatrix(stdout, c, d, y);
+	for(i = 0;i < r;i++){
+		for(j = 0;j < m;j++){
+			w[i] += god[i][j] * y[j][1]; 
+		}
+	}
+	
+  fprint_dvector(stdout, r, w);
+	printf("%lf ", w[0]);
+	for(i = 0;i < r - 1;i++){
+			printf(" + %lf x^%d ", w[i+1], i+1);
+	}
+	
+	
   free_dmatrix(a);
+  free_dmatrix(y);
   free_dmatrix(u);
+  free_dmatrix(ut);
+  free_dmatrix(v);
   free_dmatrix(vt);
   free_dvector(s);
+  free_dvector(w);
   free_dvector(work);
+  free_dmatrix(temp);
+  free_dmatrix(god);
 }
