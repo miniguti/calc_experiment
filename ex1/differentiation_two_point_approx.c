@@ -22,7 +22,11 @@ int main(void){
 
     for (i = 0; i < 50; i++){
         h = pow(2, -i);
+<<<<<<< HEAD
         printf("%20.15lf %20.15lf %20.15lf\n", h, gap_two_point(x, h), gap_three_point(x, h));
+=======
+        printf("%10.20lf %10.20lf\n", h, gap(x, h));
+>>>>>>> f04cc360e9f8e6ee1fa170e3841424da5efca10f
     }
 
 
@@ -38,7 +42,7 @@ double func(double x){
 
 double diff_two_point(double x, double h){
 
-    return (func(x + h) - func(x)) / h;
+	return (func(x + h) - func(x)) / h;
 }
 
 double diff_three_point(double x, double h){
