@@ -9,31 +9,24 @@ int main(void){
 	
 	int i, j, k, l, m, n;
 	double h;
-	
-	n = 20;  //x, yをm等分する。
-	
-	m = n*n + 2*n; //格子点の数-1
-	
-	h = 1.0 / n; //刻み幅的な
-	
 	double  **a;
+	double *b;
+	n = 30;  // boundaries quantumed by n
+	m = n*n + 2*n; //the number of lattice points -1
+	h = 1.0 / n; //step
 	
+	
+	/* allocate matrix a and vector b */
 	a = alloc_dmatrix(m+1, m+1);
-	
-		
-	//int a[m+1][m+1];
-	double b[m+1];
-	
-	//行列Aの計算
-	
-	for(i=0;i<=m;i++){  //まず全成分を0にとる
+	b = alloc_dvector(m+1);
+
+	/* calculate matrix a */
+	for(i=0;i<=m;i++){  //make all matrix elements 0
 		for(j=0;j<=m;j++){
 			a[i][j] = 0;
 		}
 	}
-	
-	//0出ない成分の計算
-	
+	//calculate non-zero elements
 	for(i=0;i<=n;i++){
 		a[i][i] = 1;
 	}
@@ -69,9 +62,9 @@ int main(void){
 	
 	
 	
-	//行列Aの出力
+	/* output matrix a */
 	
-	printf("%d %d\n", m+1, m+1); //サイズの出力
+	printf("%d %d\n", m+1, m+1); //output the size of matrix
 	
 	for (i = 0;i <= m;i++){
 		for (j = 0;j <= m;j++){
@@ -83,7 +76,7 @@ int main(void){
 		}
 	}
 	
-	//ベクトルbの計算
+	/* calculate vector b */
 	for(k=0;k<=n;k++){
 		for(i=0;i<=n;i++){
 			if(i==0){
@@ -95,14 +88,15 @@ int main(void){
 	}
 	
 	
-	//ベクトルbの出力
-	printf("%d\n", m+1, m+1); //サイズの出力
+	/* output vector b */
+	printf("%d\n", m+1, m+1); //output the size of vector
 	for (i=0;i<=m;i++){
 		printf("%lf\n", b[i]);
 	}
 	
 	
 	free_dmatrix(a);
+	free_dvector(b);
 
 	
 	return 0;

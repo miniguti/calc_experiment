@@ -1,6 +1,7 @@
 #include "matrix_util.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 /* http://www.netlib.org/lapack/explore-html/d3/d6a/dgetrf_8f.html */
 extern void dgetrf_(int *M, int *N, double *A, int *LDA, int*IPIV, int *INFO);
@@ -13,7 +14,8 @@ int main(int argc, char** argv) {
   char* filename;
   FILE *fp;
 
-  int i, k, m, n;
+  clock_t start, end;
+  int i, k, l, m, n;
   double h, x, y, z;
   double **a;
   double *b;
@@ -45,11 +47,9 @@ int main(int argc, char** argv) {
     fprintf(stderr, "Error: inconsistent number of equations\n");
     exit(1);
   }
-  //printf("Matrix A:\n");
-  //fprint_dmatrix(stdout, n, n, a);
-  //printf("Vector B (transposed):\n");
-  //fprint_dvector(stdout, n, b);
-
+  
+  start = clock();
+  
   /* perform LU decomposition */
   ipiv = alloc_ivector(n);
   dgetrf_(&n, &n, &a[0][0], &n, &ipiv[0], &info);
@@ -57,10 +57,6 @@ int main(int argc, char** argv) {
     fprintf(stderr, "Error: LAPACK::dgetrf failed\n");
     exit(1);
   }
-  //printf("Result of LU decomposition:\n");
-  //fprint_dmatrix(stdout, n, n, a);
-  //printf("Pivot for LU decomposition:\n");
-  //fprint_ivector(stdout, n, ipiv);
 
   /* solve equations */
   dgetrs_(&trans, &n, &nrhs, &a[0][0], &n, &ipiv[0], &b[0], &n, &info);
@@ -68,22 +64,21 @@ int main(int argc, char** argv) {
     fprintf(stderr, "Error: LAPACK::dgetrs failed\n");
     exit(1);
   }
-  //printf("Solution X (transposed):\n");
-  //fprint_dvector(stdout, n, b);
-	n = 20; //nçƒíËã`
-	h = 1.0/n;
+
+  end = clock();
+
+  /* output 3d plot data */
+	n = 30; //re-definition n
+	h = 1.0/n; //step
 	for(k=0;k<=n;k++){
 		for(i=0;i<=n;i++){
 			x = h*i;
 			y = h*k;
 			z = b[k*(n+1) + i];
-			printf("%lf %lf %lf\n", x, y, z);
+			printf("%lf %lf %lf\n", x, y, z); 
 		}
 	}
-	
-			
-			
-			
+
   free_dmatrix(a);
   free_dvector(b);
   free_ivector(ipiv);

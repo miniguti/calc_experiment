@@ -18,7 +18,8 @@ int main(int argc, char** argv) {
 
   int m, n, r, c, d;
   double **a, **y, **u, **ut, **v, **vt, **temp, **god;
-  double *s, *w;
+  double *s, *w, *y_model;
+  double res;
 
   int lwork;
   double *work;
@@ -49,6 +50,7 @@ int main(int argc, char** argv) {
   ut = alloc_dmatrix(r, m);
   v = alloc_dmatrix(n, r);
   vt = alloc_dmatrix(r, n);
+  y_model = alloc_dvector(m);
   s = alloc_dvector(r);
   w = alloc_dvector(r);
   temp = alloc_dmatrix(n, r);
@@ -111,11 +113,26 @@ int main(int argc, char** argv) {
 	}
 	
   fprint_dvector(stdout, r, w);
-	printf("%lf ", w[0]);
+	printf("%20.15lf ", w[0]);
 	for(i = 0;i < r - 1;i++){
-			printf(" + %lf x^%d ", w[i+1], i+1);
+			printf(" + %20.15lf * x ** %d ", w[i+1], i+1);
+	}
+
+	/* calculate residual error */
+	for(i = 0;i < m;i++){
+		for(j = 0;j < r;j++){
+			y_model[i] += w[j] * pow(y[j][0], j);
+		}
 	}
 	
+	
+	for(i = 0;i < m;i++){
+		res += pow(y[i][1] - y_model[i], 2);
+	}
+	
+	fprint_dvector(stdout, m, y_model); //‚±‚±
+	
+	printf("%lf\n", res);
 	
   free_dmatrix(a);
   free_dmatrix(y);
@@ -123,6 +140,7 @@ int main(int argc, char** argv) {
   free_dmatrix(ut);
   free_dmatrix(v);
   free_dmatrix(vt);
+  free_dvector(y_model);
   free_dvector(s);
   free_dvector(w);
   free_dvector(work);
