@@ -81,12 +81,13 @@ int main(int argc, char** argv) {
   }
   eigen_value = child / mother;
   diff = fabs(eigen_value - theo);
-  	printf("%lf\n", eigen_value);
+  	printf("%d %20.15lf\n", l+1, eigen_value);
   l += 1;
   }while((diff > epsilon) && (l < LMAX));
 
 
-  printf("%d\n", l);
+
+	printf("theoretical value is %lf\n", theo);
 /*
   //s—ñA‚Ìo—Í
 	

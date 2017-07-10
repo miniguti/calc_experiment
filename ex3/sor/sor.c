@@ -12,16 +12,14 @@
 int main(void){
 	
 	int i, j, k , l, m, n;
-	n = 30; //分割数
+	n = 20; //分割数
 	m = n*n + 2*n + 1;
 	
 	double sum_of_error; //収束条件用
 	double delta, p, q, r;
 	delta = 1.0 / n;
-	double w = 1.5; // 修正パラメータ
-	
+	double w = 1.50; // the best parameter
 	/* ベクトル、行列の動的確保 */
-	
 	double **g;
 	double **h;
 	double **c;
@@ -59,7 +57,6 @@ int main(void){
 	for(i=0;i<n+1;i++){
 		g[i][i] = 1;
 	}
-	
 	for(k=0;k<n+1;k++){
 		for(l=0;l<n+1;l++){
 			if(k==l && (k!=0) && (k!=n)){
@@ -77,10 +74,6 @@ int main(void){
 	for(i=0;i<=n;i++){
 		g[n*(n+1) + i][n*(n+1) + i] = 1;
 	}
-	
-	
-
-	
 	//行列Hの定義
 	
 	for(i=0;i<m;i++){  //まず全成分を0にとる
@@ -139,7 +132,11 @@ int main(void){
 	
 	
 	//行列g, hの掛け算
-		
+	for(i=0;i<m;i++){  //まず全成分を0にとる
+		for(j=0;j<m;j++){
+			c[i][j] = 0;
+		}
+	}
 	for(i=0;i<m;i++){
 		for(j=0;j<m;j++){
 			for(k=0;k<m;k++){
@@ -195,10 +192,9 @@ int main(void){
 		
 		
 	}while((pow(sum_of_error, 0.5) > epsilon) && (l < IMAX)); //収束条件判定
-	
-	
+
 	/* output 3D plot data */
-	/*for(k=0;k<=n;k++){
+	for(k=0;k<=n;k++){
 		for(i=0;i<=n;i++){
 			p = delta*i;
 			q = delta*k;
@@ -206,16 +202,7 @@ int main(void){
 			printf("%lf %lf %lf\n", p, q, r);
 		}
 	}
-	
-	*/
-	
-	printf("%d\n", l);
-	
-	
-	
-	
-	
-	
+
 	free_dmatrix(g);
 	free_dmatrix(h);
 	free_dmatrix(c);

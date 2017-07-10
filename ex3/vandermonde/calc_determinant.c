@@ -1,3 +1,5 @@
+/* calculate determinant of given matrix A by LU deconposition */
+
 #include "matrix_util.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -5,15 +7,15 @@
 /* http://www.netlib.org/lapack/explore-html/d3/d6a/dgetrf_8f.html */
 extern void dgetrf_(int *M, int *N, double *A, int *LDA, int*IPIV, int *INFO);
 
-
 int main(int argc, char** argv) {
   char* filename;
   FILE *fp;
 
   int i, m, n;
   double **a;
+
   double determinant = 1.0;
-  
+  double sgn = 1.0;
 
   int *ipiv;
   int info;
@@ -52,7 +54,13 @@ int main(int argc, char** argv) {
 
   /* calculate the determinant of given matrix */
   for(i = 0;i < n;i++){
-    determinant *= a[i][i];
+    if((i+1) != ipiv[i]){
+      sgn *= -1.0;  // the eigen value of matrix P
+    }
+  }
+  determinant *= sgn;
+  for(i = 0;i < n;i++){
+    determinant *= a[i][i]; // the eigen value of matrix A
   }
 
   /* output the value of determinant */

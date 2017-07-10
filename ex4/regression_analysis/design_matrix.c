@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
   //fprint_dmatrix(stdout, m, n, a);
 
   /* allocate matrices and vectors */
-  l = 15;
+  l = 5;
   mat = alloc_dmatrix(m, l);
   /* generate design matrix */
   for(i = 0;i < m;i++){

@@ -9,10 +9,22 @@
 \usepackage[truedimen, margin=25mm]{geometry}
 \usepackage{url}
 \usepackage{listings}
-\usepackage{color}
+\usepackage[dvipdfmx]{color}
 \usepackage{multicol}
+\usepackage{ascmac}
+\usepackage{tcolorbox}
+
+
 
 \setcounter{section}{-1}
+
+% prompt環境を定義
+
+\definecolor{DarkGray}{rgb}{.345,.345,.353}
+
+\newtcolorbox{prompt}{colframe=black, colback=DarkGray, coltext=white}
+\newtcolorbox{explain}{colframe=black, colback=white, coltext=black}
+
 
 \begin{document}
 
@@ -63,18 +75,24 @@ tabsize=2
 \date{2017/07/06}
 \maketitle
 
+
+\tableofcontents
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{レポートについての注意}
 
 \subsection{各課題の解答の構成について}
+
 まず課題の解釈をし、解答するためのプログラムを記載した。次に得られた結果を記載した。
 考察すべき内容があった場合は簡単な考察も付けた。すべての課題に考察がついているわけではない。
 
 
 \subsection{プログラムについて}
-各課題についてその計算を行うためのプログラムを全掲した。
-長ったらしいが、ソースコードの後に特に工夫した部分がどこかを記した。
+
+各課題についてその計算を行うためのプログラムを一部抜粋して記載した。
+
 
 
 
@@ -85,37 +103,102 @@ tabsize=2
 LU分解を用いて行列の行列式を計算するプログラムを作成した。
 
 
-\lstinputlisting[basicstyle=\ttfamily, frame=single, caption=LU分解を用いて行列の行列式を計算するプログラム]
-{./ex3/vandermonde/calc_determinant.c}
+\lstinputlisting[basicstyle=\ttfamily, frame=single, caption=LU分解を用いて行列の行列式を計算するプログラムの抜粋]
+{./ex3/vandermonde/calc_determinant_rep.c}
 
-このプログラムを用いてVandermonde行列の行列式を計算した。今回は5行5列で
+見どころは20行目から29行目の行列式を計算する箇所だ。このように行列式を計算する理由は後の考察で述べる。
+
+このプログラムに別途生成したVandermonde行列を入力して、その行列式を計算した。今回は5行5列で
 \[
 (x_1, x_2, x_3, x_4, x_5) = (1, 2, 3, 4, 5)
 \]
-のVandermonde行列を用いた。5行5列程度の行列なら手打ちで成分を書きだすこともできなくはないが、
-もっと大きなサイズのVandermonde行列を作るとすると手打ちでは苦しい。なので$(x_1, x_2, \cdots, x_n)$を指定してVandermonde行列を
-生成するプログラムも作成した。
+のVandermonde行列を用いた。
 
-\lstinputlisting[basicstyle=\ttfamily, frame=single, caption=Vandermonde行列を生成するプログラム]
-{./ex3/vandermonde/vandermonde.c}
 
-行列のサイズが大きくなるとVandermonde行列の行列式も手計算では一苦労なのでこれも$(x_1, x_2, \cdots, x_n)$を指定して自動で計算する
-プログラムを作成した。
-
-\lstinputlisting[basicstyle=\ttfamily, frame=single, caption=Vandermonde行列の行列式の厳密な値を計算するプログラム]
-{./ex3/vandermonde/vandermonde_theo.c}
 
 以上のプログラムを用いて数値計算した行列式と厳密な値とを比較した。
 
 \subsection{結果}
-数値計算では-288となったが、厳密な行列式の値を計算すると288となった。
-数値計算した値は厳密な値と比べて符号が反転していた。
+数値計算した結果行列式の値は288となり、厳密な行列式の値と一致した。
+
+\begin{prompt}
+\verbatiminput{vandermonde.txt}
+\end{prompt}
 
 
 
-\subsection{考察(LU分解のアルゴリズム)}
-符号が反転した理由は数値計算の際に用いたLU分解のアルゴリズムを考えることで理解できる。
-%ピボット選択をするごとに行列式は(-1)倍になるので
+\subsection{考察(LU分解を用いた行列式の計算)}
+
+LU分解すると言っても自分が計算するわけではなく、LAPACKのdgetrf関数を用いたので、どのように行列が分解されるのかは
+その関数の説明を読まないことには理解のしようがない。
+\url{http://www.netlib.org/lapack/explore-html/d3/d6a/dgetrf_8f.html}にはこう説明されている。
+\begin{explain}
+\begin{verbatim}
+ DGETRF computes an LU factorization of a general M-by-N matrix A
+ using partial pivoting with row interchanges.
+
+ The factorization has the form
+    A = P * L * U
+ where P is a permutation matrix, L is lower triangular with unit
+ diagonal elements (lower trapezoidal if m > n), and U is upper
+ triangular (upper trapezoidal if m < n).
+
+ This is the right-looking Level 3 BLAS version of the algorithm.
+\end{verbatim}
+\end{explain}
+
+また行列Aがdgetrf関数に取り込まれるとどうなるかも説明されている。
+
+
+\begin{explain}
+\begin{verbatim}
+ A is DOUBLE PRECISION array, dimension (LDA,N)
+ On entry, the M-by-N matrix to be factored.
+ On exit, the factors L and U from the factorization
+ A = P*L*U; the unit diagonal elements of L are not stored.
+\end{verbatim}
+\end{explain}
+
+
+つまり、LU分解したい行列としてAを入力すると、行列Aは
+対角成分より上が分解されてできた上三角行列の成分、
+対角成分より下が下三角行列の成分、が上書きされて出力される。
+なお対角成分は上三角行列の成分で、下三角行列の対角成分は省略されるとのことだ。
+しかし下三角行列の対角成分は全て1なので問題ない。
+
+
+というわけなので、行列Aは行置換行列P、下三角行列L、上三角行列Uに分解される。
+そして行列がこのように分解されるとき、行列Aの行列式は
+\[
+\det A = (\det P)(\det L)(\det U)
+\]
+とP、L、Uそれぞれの行列式の積である。
+
+\begin{array}
+\det P = (-1)^n \ \ \ \ \ \text{$n$は行置換の回数} \notag \\
+\det L = 1 \notag \\
+\det U = trU \notag
+\end{array}
+
+detPは行置換の回数が分かれば求められる。これにはdgetrf関数の出力であるIPIVを見ればよい。
+例えば今回の場合、
+
+\[
+\text{IPIV} = (1, 5, 3, 4, 5)
+\]
+であったので、途中で2行目と5行目が入れ替えられていることが分かる。それ以外に行置換はなかったので
+奇置換であったことが分かる。このようにIPIVの成分を見ることで何回行置換が行われたかが分かり、
+つまりdetPを求めることが出来る。
+
+detLはLU分解するとLの対角成分は全て1になるので常に1である。
+
+detUを求めるにはUのトレースを求める、つまりUの対角成分が分かればよい。
+dgetrf関数から出力された行列の対角成分はUの対角成分なので、この対角成分の積を
+計算したものがdetUである。
+
+従って行列Aの行列式はdetUにsgn($\sigma$)をかけたものになる。
+
+以上の考察を踏まえて行列式を計算するのが冒頭のプログラムの20行目から29行目である。
 
 
 \section{基本課題EX3-2}
@@ -141,6 +224,10 @@ LU分解を用いてDirichlet境界条件の下での二次元Laplace方程式の解を求めるプログラム
 u(0, y) = \sin{\pi y}, u(x, 0) = u(x, 1) = u(1, y) = 0
 \]
 とした。
+
+各メッシュ数での解の形は次のようになった。
+
+
 
 \begin{figure}[H]
  \noindent
@@ -176,7 +263,33 @@ u(0, y) = \sin{\pi y}, u(x, 0) = u(x, 1) = u(1, y) = 0
 \end{figure}
 
 
-\subsection{考察}
+次に計算時間の変化を調べた。
+計算時間と言ってもどこからどこまでの処理時間をとるかは様々である。
+ここではプログラムの行列をLU分解して解を得るところまでを測定した。
+測定はc言語のtime.hをインクルードしてclock()関数を用いた。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/laplace_lu/laplace_time_lin.eps}
+ \caption{meshを増やしたときの計算時間の変化。計算時間はメッシュ数の冪で増えていることが分かる。}
+ \end{center}
+\end{figure}
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/laplace_lu/laplace_time_log.eps}
+ \caption{meshを増やしたときの計算時間の変化。計算時間はメッシュ数の3乗に比例して増えていることが分かる。}
+ \end{center}
+\end{figure}
+
+
+\subsection{考察(直接法の計算量)}
+実験的に連立一次方程式の解を直接法で計算するのは計算量が$O(n^3)$であることが分かった。
+
+ここではその理論的根拠を示したい。
+
 
 
 
@@ -184,9 +297,72 @@ u(0, y) = \sin{\pi y}, u(x, 0) = u(x, 1) = u(1, y) = 0
 
 \subsection{実験概要}
 
+Laplace方程式の境界値問題をjacobi法で解くプログラムを作成した。
+\lstinputlisting[basicstyle=\ttfamily, frame=single, caption=jacobi法でLaplace方程式を解くプログラム]
+{./ex3/jacobi/jacobi.c}
+
+まず適当なメッシュの数での計算結果から得られた解をプロットした。
+
+次にメッシュ数を増やしていくと計算速度がどう変化するかを調べた。
+ここでは計算速度は解を求める際の反復回数とした。
+
+
 \subsection{実験結果}
 
-\subsection{考察}
+まず、解の形は次のようになった。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/jacobi/plot_mesh_10.eps}
+ \caption{mesh数が100の解。}
+ \end{center}
+\end{figure}
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/jacobi/plot_mesh_30.eps}
+ \caption{mesh数が900の解。}
+ \end{center}
+\end{figure}
+
+次にメッシュ数を増やしたときの反復回数の変化である。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/jacobi/jacobi1_linear.eps}
+ \caption{反復回数の変化。反復回数がメッシュ数に比例していることが分かる。}
+ \end{center}
+\end{figure}
+
+また解を求めるのにかかる処理時間をC言語のclock()関数で計測した。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/jacobi/jacobi1_time_lin.eps}
+ \caption{メッシュ数を増やしていったときの処理時間の変化。}
+ \end{center}
+\end{figure}
+
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/jacobi/jacobi1_time_log.eps}
+ \caption{メッシュ数を増やしていったときの処理時間の変化を両対数プロットした図。
+ 処理時間がメッシュ数の3乗に比例していることが分かる。}
+ \end{center}
+\end{figure}
+
+
+
+\subsection{考察(反復法の計算量)}
+
+
+
 
 
 
@@ -307,73 +483,201 @@ m[5]はm[5][0]のアドレスなので
 
 実際にpointer.cを走らせて得られた出力をまとめた。
 
-
-\begin{table}[H]
- \begin{center}
-  \caption{最大次数と残差}
-  \begin{tabular}{|c|r|}
-   \hline
-  変数 & 出力結果   \\ 
-   \hline \hline
-v     & 25769804768 \\
-\hline
-\&v[0] & 25769804768 \\
-\hline
-(v+2) & 25769804784 \\
-\hline
-\&v[2] & 25769804784 \\
-\hline
-*v       &    0.00000 \\
-\hline
-v[0]     &    0.00000 \\
-\hline
-*(v+2)   &    2.00000 \\
-\hline
-v[2]     &    2.00000 \\
-\hline
-(v+2)[3] &    5.00000 \\
-\hline
-*(v+2+3) &    5.00000 \\
-\hline
-m        & 25769804768 \\
-\hline
-\&m[0]    & 25769804768 \\
-\hline
-m[0]     & 25770100688 \\
-\hline
-\&m[0][0] & 25770100688 \\
-\hline
-m[2]     & 25770100848 \\
-\hline
-\&m[2][0] & 25770100848 \\
-\hline
-m+2      & 25769804784 \\
-\hline
-\&m[2]    & 25769804784 \\
-\hline
-(*(m+2))[3] &  203.00000 \\
-\hline
-*(*(m+2)+3) &  203.00000 \\
-\hline
-m[2][3]     &  203.00000 \\
-\hline
-*(m+2)[3]   &  500.00000 \\
-\hline
-*((m+2)[3]) &  500.00000 \\
-\hline
-*(m[5])     &  500.00000 \\
-\hline
-m[5][0]     &  500.00000 \\
-\hline
-  \end{tabular}
- \end{center}
-\end{table}
+\begin{prompt}
+\verbatiminput{pointer.txt}
+\end{prompt}
 
 結果は予想と一致していた。
 
 \section{応用課題EX3-2}
 
-\section{基本課題EX3-3}
+\subsection{実験概要}
+Laplace方程式の境界値問題をGauss-Seidel法、SOR法で解くプログラムを作成した。
+
+まず、Gauss-Seidel法のプログラムである。
+
+\lstinputlisting[basicstyle=\ttfamily, frame=single, caption=jacobi法でLaplace方程式を解くプログラム]
+{./ex3/gauss_seidel/gauss_seidel.c}
+
+次にSOR法のプログラムである。
+
+\lstinputlisting[basicstyle=\ttfamily, frame=single, caption=jacobi法でLaplace方程式を解くプログラム]
+{./ex3/sor/sor.c}
+
+
+まずGauss-Seidel法について、jacobi法について行ったのと同様の実験をした。
+
+次にSOR法について、かなり詳しく修正パラメータと反復回数の関係を調べた。
+
+また最後に、jacobi法、gauss-seidel法、いくつかの修正パラメータでのSOR法の計算速度(反復回数)の比較をした。
+
+\subsection{実験結果}
+
+まずはGauss-Seidel法について。
+
+解の形は次のようになった。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/gauss_seidel/gauss10.eps}
+ \caption{mesh数が100の解。}
+ \end{center}
+\end{figure}
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/gauss_seidel/gauss30.eps}
+ \caption{mesh数が900の解。}
+ \end{center}
+\end{figure}
+
+次にメッシュ数を増やしたときの反復回数の変化である。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/gauss_seidel/gauss1_linear.eps}
+ \caption{反復回数の変化。反復回数がメッシュ数に比例して増加していることが分かる。}
+ \end{center}
+\end{figure}
+
+
+
+次にSOR法について。以下$\omega$は修正パラメータのことを指す。
+
+まず、$\omega = 1$のとき、反復回数がGauss-Seidel法の場合と一致することを確かめた。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/sor/gauss_sor100.eps}
+ \caption{Gauss-Seidel法とSOR法($\omega = 1$)の反復回数の変化の比較。完全に一致している。}
+ \end{center}
+\end{figure}
+
+次に試しに$\omega = 1.50$で同様に反復回数の変化を調べてみた。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/sor/gauss_sor150.eps}
+ \caption{Gauss-Seidel法とSOR法($\omega = 1.50$)の反復回数の変化の比較。}
+ \end{center}
+\end{figure}
+
+これを見ると、SOR法の方が反復回数が優れているというだけでなく
+SOR法の反復回数の振る舞いが特徴的であることが分かる。
+具体的にはこの場合だと、$n=10$ぐらいまでは反復回数が一定値をとり、その後べき的に
+増加しているように見える。
+
+特に、$n=10$付近の反復回数の振る舞いが変化する点が何を意味しているかが気になる。
+以下、このような点(以下転位点と呼ぶ)の意味について考える。
+
+というわけで、次は少し方向性を変え、ある$n$の値について、$\omega$を変化させたとき、
+反復回数はどう変化するかを調べてみた。
+
+$n=20$について。次のような結果が得られた。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/sor/parameter.eps}
+ \caption{修正パラメータ$\omega$をいろいろ変化させたときの反復回数の変化。$\omega = 1.73$
+ で反復回数が最小値を取ることが分かった。}
+ \end{center}
+\end{figure}
+
+この反復回数を最小にする修正パラメータは先ほどの転位点と何かしら関係があるに違いないと考え
+$\omega = 1.73$に固定して$n$を変化させて反復回数の振る舞いを調べた。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/sor/sor173.eps}
+ \caption{SOR法($\omega = 1.73$)の反復回数の変化。}
+ \end{center}
+\end{figure}
+
+この場合転位点は$n=20$である。
+
+以上の結果から得られる結論は、
+
+「ある$\omega$を固定して$n$を変化させたときに反復回数の振る舞いが変化する転位点の$n$の値は
+固定した$\omega$が反復回数を最小にする$n$の値と一致する」
+
+ということだ。
+
+ところで本筋からは外れるが$w < 1$の場合の反復回数の変化を興味があったので調べてみた。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/sor/gauss_sor80.eps}
+ \caption{Gauss-Seidel法とSOR法($\omega = 0.80$)の反復回数の変化の比較。}
+ \end{center}
+\end{figure}
+
+確かにGauss-Seidel法よりも収束までにかかる反復回数が多くなることが分かった。
+
+一方$\omega > 2$の場合は次のようになった。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/sor/sor220.eps}
+ \caption{SOR法($\omega = 2.20$)の反復回数の変化。}
+ \end{center}
+\end{figure}
+
+全て反復回数が1000になっているのはプログラムで反復回数の上限を設定していたからである。
+つまり、この場合、収束していないということになる。
+
+ちなみにわざわざ記載しないが$\omega < 0$の場合も収束しない。
+
+修正パラメータで遊ぶのはここまでにして、課題の解答に移る。
+
+$\omega = 1.50$、$n=20$の時の解の形は次のようになった。
+
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/sor/sor20.eps}
+ \caption{mesh数が400の解。}
+ \end{center}
+\end{figure}
+
+
+
+
+最後にJacobi法、Gauss-Seidel法、いくつかの修正パラメータでのSOR法の反復回数の変化を重ねてプロットすると次のようになった。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex3/sor/jacobi_gauss_sor.eps}
+ \caption{Jacobi法、Gauss-Seidel法、SOR法($\omega = 0.80、\omega = 1.50$)の反復回数の変化の比較。}
+ \end{center}
+\end{figure}
+
+
+
+
+\subsection{考察(SOR法について)}
+
+
+
+
+
+\section{応用課題EX3-3}
+
+\subsection{実験概要}
+
+\subsection{実験結果}
+
+\subsection{考察}
 
 
 
@@ -383,13 +687,31 @@ m[5][0]     &  500.00000 \\
 べき乗法を用いて最大固有値を計算するプログラムを作成し
 成分が$v_{ij}=min(i, j)(1 \leq i \leq n, 1 \leq j \leq n)のn \times n 対称行列の固有値を求めた。$
 
-%\lstinputlisting[basicstyle=\ttfamily, frame=single, caption=pointer.c]
-%{./ex4/power_iteration/power_iteration.c}
+\lstinputlisting[basicstyle=\ttfamily, frame=single, caption=べき乗法により行列の最大固有値を計算するプログラム]
+{./ex4/power_iteration/power_iteration.c}
 
 
 \subsection{実験結果}
+まず10 $\times$ 10行列について最大固有値を求めた。得られた結果は44.76606、と期待通り理論値と$10^{-5}$の精度で一致していた。
 
-\subsection{考察}
+
+次に行列の大きさ$n$を変えた時の最大固有値の収束の速さの変化を調べた。ここでは収束の速さを
+「反復前と後との差が$10^{-5}$になるまでにかかった反復回数」とした。また反復回数とは初期ベクトルに行列Aをかけた回数である。
+
+nを増やしたときの反復回数の変化は次のようになった。
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex4/power_iteration/power.eps}
+ \caption{nを変化させたときの反復回数の変化。}
+ \end{center}
+\end{figure}
+
+このようにnを増やしても反復回数はほとんど一定である。
+
+
+\subsection{考察(反復回数が変わらない理由)}
 
 
 
@@ -397,37 +719,123 @@ m[5][0]     &  500.00000 \\
 
 \subsection{実験概要}
 ファイルmeasurement.datに収められている実験データを最小二乗法により任意の次数の多項式でフィッティングできるプログラムを作成した。
-このプログラムを用いて多項式の最大次数を変えた時に最も良いと考えられる最大次数を推定した。
-最後にその最良の最大次数の多項式を用いて実験データをフィッティングした。
+
+
+このプログラムを用いていくつかの次数の多項式を用いて実験データをフィッティングした。
+
+その後、与えられた実験データに対してどの次数の多項式を用いるべきかを考察した。
 
 \subsection{実験結果}
-まず多項式の最良の最大次数を推定した。推定するにあたっては、各最大次数の多項式について実験データとの残差を
-計算し最も残差の小さい最大次数を最良であると判断した。
 
-以下が各最大次数に対して計算した残差の表である。
+
+
+
+
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex4/regression_analysis/fit_2.eps}
+ \caption{2次の多項式によるフィッティング。具体的な関数形は$0.55584+0.31884x-0.10277x^2$である。残差は270.283764
+であった。}
+ \end{center}
+\end{figure}
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex4/regression_analysis/fit_10.eps}
+ \caption{10次の多項式によるフィッティング。具体的な関数形は$   0.588516023906752  +   
+  0.185402638994059 * x ** 1  +   -1.994525558824886 * x ** 2  +    4.312846427303525 * x ** 3  +   -3.660413525518576 * x ** 4  
+ +    1.608970595609172 * x ** 5  +   -0.409620479440985 * x ** 6  +    0.062714067684458 * x ** 7  
+ +   -0.005696507048031 * x ** 8  +    0.000282866752094 * x ** 9  +   -0.000005915134526 * x ** 10
+$である。残差は268.023440であった。}
+ \end{center}
+\end{figure}
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex4/regression_analysis/fit_15.eps}
+ \caption{15次の多項式によるフィッティング。具体的な関数形は長すぎるので略。残差は181.754709
+である。}
+ \end{center}
+\end{figure}
+
+以上の結果より、次数を大きくすればするほど実験データ一点一点によりフィットした曲線が得られて、残差も小さくなるので
+最も良い多項式の次数は29(30より大きいと実験データの数よりも未知パラメータの方が多くなり曲線が決まらない)である、と結論付けるべきだろうか？いやそうではない。
+
+目的が残差を最も小さくすることであればもちろん次数を大きくとればいい話だが、"実験データを演繹的に予測する"
+曲線を求めるというのが本来の目的であるので、最良の次数を求めるには違ったアプローチが必要である。
+
+そこで今回は交差検証法を用いて最適な次数を求めることにする。
+
+交差検証法とはここでは実験データをトレーニングデータとテストデータの2つに分けて、
+トレーニングデータに対して回帰分析を行った得られたフィッティング曲線が
+テストデータに対してもフィットしているかを調べる手法である。
+
+そのためにmesuament.datで与えられている実験データを3つの組に分ける。
+$x$の値の小さい方から10つをデータ1、次の10つをデータ2、最後の10つをデータ3と呼ぶことにする。
+
+そしてこの3組のデータをトレーニングデータとテストデータの次のように2組に分け、
+3回検証を行った。
+
+
 
 \begin{table}[H]
  \begin{center}
-  \caption{最大次数と残差}
-  \begin{tabular}{|c|l|c|}
+  \caption{各検証で用いたデータの分類}
+  \begin{tabular}{|c|c|c|c|}
    \hline
-   次数 & 多項式 &  残差  \\ 
+     & 検証1 & 検証2 & 検証3   \\ 
    \hline \hline
-   1 & 2.209534  + -0.708812 $x^1$ & 482.670215 \\
+    トレーニングデータ & データ1と2  & データ2と3 & データ3と1  \\
    \hline
-   2 & 0.555836  + 0.318843 $x^1$  + -0.102766 $x^2$ & 270.283764 \\
-   \hline
-   3 & 0.417774  + 0.500040 $x^1$  + -0.148841 $x^2$  + 0.003072 $x^3$ & 259.532303  \\
-   \hline
-   4 &  0.527741  + 0.240453 $x^1$  + -0.027370 $x^2$  + -0.016031 $x^3$  + 0.000955 $x^4$ & 266.388636 \\
-   \hline
-   5 &  0.514604  + 0.291929 $x^1$  + -0.065848 $x^2$  + -0.005524 $x^3$  + -0.000236 $x^4$  + 0.000048 $x^5$ & 265.740389 \\
-   \hline
-   6 & 0.530055  + 0.195282 $x^1$  + 0.040494 $x^2$  + -0.049690 $x^3$  + 0.008180 $x^4$  + -0.000697 $x^5$  + 0.000025 $x^6$ & 266.299869  \\
+    テストデータ & データ3  & データ1 & データ2 \\
    \hline
   \end{tabular}
  \end{center}
 \end{table}
+
+
+
+2、3、4次の多項式をトレーニングデータにフィットするように回帰分析で求め
+この多項式でテストデータを含めた全データに対してフィットしているかどうかを確かめた。
+データ点の分布から線形近似では適切な回帰分析とは言えない、そして
+5次以上などの高次の多項式では以下で4次に対して見られるように回帰分析として適当でないので
+最初から検証対象から除外した。
+
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex4/regression_analysis/test1.eps}
+ \caption{検証1の結果。2次の多項式が最もよくテストデータにフィットしている。}
+ \end{center}
+\end{figure}
+
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex4/regression_analysis/test2.eps}
+ \caption{検証2の結果。2次の多項式が最もよくテストデータにフィットしている。}
+ \end{center}
+\end{figure}
+
+
+\begin{figure}[H]
+ \noindent
+ \begin{center}
+ \includegraphics[width=12cm, angle=270]{ex4/regression_analysis/test3.eps}
+ \caption{検証3の結果。この検証ではどの次数の多項式もテストデータにフィットしている。}
+ \end{center}
+\end{figure}
+
+以上の検証の結果から、残差等を計算するまでもなく、2次の多項式を使うのが最も良いと結論付けることが出来る。
+
+
+
 
 
 \subsection{考察}
@@ -448,44 +856,14 @@ m[5][0]     &  500.00000 \\
 特異値分解のサンプルプログラム(svd.c)をコンパイルし、入力matrix2.datを用いて
 プログラムを実行した。
 
+
+
 \subsection{実験結果}
 
 得られた出力をそのまま記載する。
 
-\begin{lstlisting}[basicstyle=\ttfamily, frame=single, caption=pointer.c]
-Matrix A:
-4 3
-   1.00000    2.00000    3.00000
-   6.00000    4.00000    5.00000
-   8.00000    9.00000    7.00000
-  10.00000   11.00000   12.00000
-Result of SVD U:
-4 3
-  -0.13801   -0.61647   -0.05283
-  -0.34037    0.37028    0.81421
-  -0.54626    0.53543   -0.57516
-  -0.75280   -0.44293    0.05891
-Result of SVD S:
-3
-  25.34681    2.14879    1.70929
-Result of SVD Vt:
-3 3
-  -0.55543   -0.58526   -0.59074
-   0.67915    0.09067   -0.72838
-   0.47986   -0.80576    0.34712
-Reconstruction of the original matrix A:
-4 3
-   1.00000    2.00000    3.00000
-   6.00000    4.00000    5.00000
-   8.00000    9.00000    7.00000
-  10.00000   11.00000   12.00000
-Rank (r-1) approximation of A:
-4 3
-   1.04333    1.92724    3.03134
-   5.33218    5.12139    4.51691
-   8.47175    8.20785    7.34126
-   9.95168   11.08113   11.96505
-\end{lstlinsting}
+\lstinputlisting[basicstyle=\ttfamily, frame=single, caption=svd.cの入力matrix2.datに対する実行結果]
+{svd_sample.txt}
 
 
 講義L4の例が再現されていることが確認できた。(有効桁数は異なるが)
@@ -496,15 +874,50 @@ Rank (r-1) approximation of A:
 
 \section{応用課題EX4-3}
 
-\subsection{実験概要}
 
-\subsection{実験結果}
 
-\subsection{考察}
+\subsection{考察(LAPACKによる特異値分解について)}
+
+課題にある通り、svd.c 中のLAPACKの特異値分解dgesvdの呼び出し(54 行目)では、行列の次元(mと
+n)、左特異ベクトル(u)と右特異ベクトル(vt)の順番が、もともとのdgesvd のドキュメ
+ント1とは逆になっている。しかし応用課題4-2で見たようにsvd.cの実行結果を見ると
+正しい特異値分解が得られている。
+
+なぜうまくいくかは講義で習ったように、CとFortranでは二次元配列のメモリ上での並びが違うので、
+C言語で書いた2次元配列はFortranに渡ると転置されるからである。
+
+というよりも、転置されてしまうことを考慮してmとn、uとvtを逆にしているのだ。
+
+以下ではなぜうまくいくかを具体的に考察する。
+
+行列Aが
+\[
+A = U \Lambda V^{T}
+\]
+と特異値分解されるとする。
+
+行列AをC言語の2次元配列で記述してこれをdgesvdに取り込む、つまりFortranに渡すと
+転置されdgesvdは行列
+\[
+A^{T} = V \Lambda^{T} U^{T}
+\]
+を行列Aとして受け取ったと勘違いする。
+dgesvdはこれを素直に特異値分解し、行列$V$をdgesvdの引数uに、行列$U^{T}$をdgesvdの引数vtに格納して
+C言語に返す。C言語に帰ってくるときにこれらは再び転置されるので
+C言語上でdgesvdの引数uには行列$V^{T}$が、dgesvdの引数vtには行列$U$が入力されている。
+なのでこのプログラムを実行するとUが出力されるべきところに$V^{T}$が、$V^{T}$が出力されるべきところに
+$U$が表示されてしまう。
+
+なのでC言語プログラムでdgesvdを使うときはFortran上で本来Uが書き込まれるところにvtを、
+$V^{T}$が書き込まれるところにuを書いておけば、正しくu、vtが得られることになる。
+
 
 \section{応用課題EX4-4}
 
+
 \subsection{実験概要}
+
+
 
 \subsection{実験結果}
 

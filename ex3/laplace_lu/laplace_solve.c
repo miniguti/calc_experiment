@@ -14,7 +14,6 @@ int main(int argc, char** argv) {
   char* filename;
   FILE *fp;
 
-  clock_t start, end;
   int i, k, l, m, n;
   double h, x, y, z;
   double **a;
@@ -48,8 +47,6 @@ int main(int argc, char** argv) {
     exit(1);
   }
   
-  start = clock();
-  
   /* perform LU decomposition */
   ipiv = alloc_ivector(n);
   dgetrf_(&n, &n, &a[0][0], &n, &ipiv[0], &info);
@@ -65,10 +62,8 @@ int main(int argc, char** argv) {
     exit(1);
   }
 
-  end = clock();
-
   /* output 3d plot data */
-	n = 30; //re-definition n
+	n = 10; //re-definition n
 	h = 1.0/n; //step
 	for(k=0;k<=n;k++){
 		for(i=0;i<=n;i++){

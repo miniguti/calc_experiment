@@ -1,4 +1,4 @@
-//jacobi法でlaplace方程式を解く
+/* solve laplace.eq by jacobi method */
 
 
 #include"matrix_util.h" //jacobi.cと同じ階層に置いておく
@@ -7,17 +7,15 @@
 #include<math.h>
 
 #define IMAX 1000
+#define NMAX 20
 #define epsilon pow(10, -5)
 
 int main(void){
 	
 	int i, j, k , l, m, n;
-	n = 20; //分割数
-	m = n*n + 2*n + 1;
 	
 	double sum_of_error; //収束条件用
 	double delta, p, q, r;
-	delta = 1.0 / n;
 	
 	/* ベクトル、行列の動的確保 */
 	
@@ -32,6 +30,11 @@ int main(void){
 	double *temp;
 	
 	
+	for(n=1;n < NMAX;n++){
+	m = n*n + 2*n + 1;
+	delta = 1.0 / n;
+
+
 	g = alloc_dmatrix(m, m); //G = D^(-1)
 	h = alloc_dmatrix(m, m); //H = E + F
 	c = alloc_dmatrix(m, m);
@@ -138,7 +141,13 @@ int main(void){
 	
 	
 	//行列g, hの掛け算
-		
+
+	for(i=0;i<m;i++){  //まず全成分を0にとる
+		for(j=0;j<m;j++){
+			c[i][j] = 0;
+		}
+	}
+
 	for(i=0;i<m;i++){
 		for(j=0;j<m;j++){
 			for(k=0;k<m;k++){
@@ -149,6 +158,9 @@ int main(void){
 	
 	
 	//行列gとベクトルbの掛け算
+	for(i=0;i<m;i++){
+			z[i] = 0.0;
+		}
 
 	for(i=0;i<m;i++){
 		for(j=0;j<m;j++){
@@ -179,6 +191,10 @@ int main(void){
 			}
 		}
 		
+		for(i=0;i<m;i++){
+			temp[i] = x[i];
+		}
+		
 		
 		for(i=0;i<m;i++){
 			x[i] = -y[i] + z[i];  //次のステップのx[i]を計算。-D^(-1) * (E + F)*x + D^(-1) * b
@@ -191,14 +207,18 @@ int main(void){
 			sum_of_error += pow(x[i] - temp[i], 2);
 		}
 		
+		//printf("%lf %lf\n", x[103], temp[103]);
 		
+		sum_of_error = x[n+n/2] - temp[n+n/2];
 		
 		
 	}while((pow(sum_of_error, 0.5) > epsilon) && (l < IMAX)); //収束条件判定
 	
+		printf("%d %d\n", n, l);
+	}
 	
 	/* output 3D plot data */
-	for(k=0;k<=n;k++){
+	/*for(k=0;k<=n;k++){
 		for(i=0;i<=n;i++){
 			p = delta*i;
 			q = delta*k;
@@ -206,7 +226,7 @@ int main(void){
 			printf("%lf %lf %lf\n", p, q, r);
 		}
 	}
-	
+	*/
 	
 	
 	

@@ -12,7 +12,7 @@
 int main(void){
 	
 	int i, j, k , l, m, n;
-	n = 30; //分割数
+	n = 20; //分割数
 	m = n*n + 2*n + 1;
 	
 	double sum_of_error; //収束条件用
@@ -138,7 +138,11 @@ int main(void){
 	
 	
 	//行列g, hの掛け算
-		
+	for(i=0;i<m;i++){  //まず全成分を0にとる
+		for(j=0;j<m;j++){
+			c[i][j] = 0;
+		}
+	}
 	for(i=0;i<m;i++){
 		for(j=0;j<m;j++){
 			for(k=0;k<m;k++){
@@ -147,18 +151,13 @@ int main(void){
 		}
 	}
 	
-	
 	//行列gとベクトルbの掛け算
-
 	for(i=0;i<m;i++){
 		for(j=0;j<m;j++){
 			z[i] += g[i][j] * b[j];  // D^(-1) * b
 		}
 	}
-	
-	
-	
-	
+
 	l = 0; // ループのためのダミー変数
 	
 	do{
@@ -170,6 +169,10 @@ int main(void){
 			y[i] = 0.0;
 		}
 		
+		
+		for(i=0;i<m;i++){
+			temp[i] = x[i];
+		}
 		
 		
 		//行列cとベクトルxの掛け算
@@ -184,6 +187,8 @@ int main(void){
 		
 		l = l + 1;
 		
+		
+		
 		for(i=0;i<m;i++){
 			sum_of_error += pow(x[i] - temp[i], 2);
 		}
@@ -193,6 +198,7 @@ int main(void){
 		
 	}while((pow(sum_of_error, 0.5) > epsilon) && (l < IMAX)); //収束条件判定
 	
+	//printf("%d %d %lf\n", n, l);
 	
 	/* output 3D plot data */
 	for(k=0;k<=n;k++){
@@ -203,7 +209,6 @@ int main(void){
 			printf("%lf %lf %lf\n", p, q, r);
 		}
 	}
-	
 	
 	
 	

@@ -130,9 +130,9 @@ int main(int argc, char** argv) {
 		res += pow(y[i][1] - y_model[i], 2);
 	}
 	
-	fprint_dvector(stdout, m, y_model); //‚±‚±
+	//fprint_dvector(stdout, m, y_model); //‚±‚±
 	
-	printf("%lf\n", res);
+	printf("\n%lf\n", res);
 	
   free_dmatrix(a);
   free_dmatrix(y);
