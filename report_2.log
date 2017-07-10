@@ -1,4 +1,4 @@
-This is e-pTeX, Version 3.1415926-p3.4-110825-2.6 (sjis) (TeX Live 2013/W32TeX) (format=platex 2016.10.12)  10 JUL 2017 13:32
+This is e-pTeX, Version 3.1415926-p3.4-110825-2.6 (sjis) (TeX Live 2013/W32TeX) (format=platex 2016.10.12)  10 JUL 2017 14:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -664,297 +664,298 @@ LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <9> not available
 File: vandermonde.txt  (verbatim)
  [3] [4]
 LaTeX Font Info:    Font shape `JT1/mc/m/n' will be
-(Font)              scaled to size 4.805pt on input line 177.
+(Font)              scaled to size 4.805pt on input line 181.
 
-(./ex3/laplace_lu/laplace.c [5] [6]) (./ex3/laplace_lu/laplace_solve.c [7]
-[8]) [9]
+(./ex3/laplace_lu/laplace_solve_rep.c [5])
 File: ex3/laplace_lu/plot_mesh_5.eps Graphic file (type eps)
  <ex3/laplace_lu/plot_mesh_5.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 233--234
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 240--241
  [] 
  []
 
 File: ex3/laplace_lu/plot_mesh_10.eps Graphic file (type eps)
 <ex3/laplace_lu/plot_mesh_10.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 241--242
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 248--249
  [] 
  []
 
-[10]
+[6]
 File: ex3/laplace_lu/plot_mesh_30.eps Graphic file (type eps)
  <ex3/laplace_lu/plot_mesh_30.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 249--250
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 256--257
  [] 
  []
 
-[11]
+[7]
 File: ex3/laplace_lu/plot_mesh_50.eps Graphic file (type eps)
  <ex3/laplace_lu/plot_mesh_50.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 258--259
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 265--266
+ [] 
+ []
+
+[8]
+File: ex3/laplace_lu/laplace_time_lin.eps Graphic file (type eps)
+ <ex3/laplace_lu/laplace_time_lin.eps>
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 279--280
+ [] 
+ []
+
+[9]
+File: ex3/laplace_lu/laplace_time_log.eps Graphic file (type eps)
+ <ex3/laplace_lu/laplace_time_log.eps>
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 287--288
+ [] 
+ []
+
+[10] (./ex3/jacobi/jacobi_rep.c [11])
+File: ex3/jacobi/plot_mesh_10.eps Graphic file (type eps)
+ <ex3/jacobi/plot_mesh_10.eps>
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 322--323
  [] 
  []
 
 [12]
-File: ex3/laplace_lu/laplace_time_lin.eps Graphic file (type eps)
- <ex3/laplace_lu/laplace_time_lin.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 272--273
+File: ex3/jacobi/plot_mesh_30.eps Graphic file (type eps)
+ <ex3/jacobi/plot_mesh_30.eps>
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 330--331
  [] 
  []
 
 [13]
-File: ex3/laplace_lu/laplace_time_log.eps Graphic file (type eps)
- <ex3/laplace_lu/laplace_time_log.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 280--281
- [] 
- []
-
-[14] (./ex3/jacobi/jacobi.c [15] [16] [17] [18] [19] [20])
-File: ex3/jacobi/plot_mesh_10.eps Graphic file (type eps)
-
-<ex3/jacobi/plot_mesh_10.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 315--316
- [] 
- []
-
-[21]
-File: ex3/jacobi/plot_mesh_30.eps Graphic file (type eps)
- <ex3/jacobi/plot_mesh_30.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 323--324
- [] 
- []
-
-[22]
 File: ex3/jacobi/jacobi1_linear.eps Graphic file (type eps)
  <ex3/jacobi/jacobi1_linear.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 333--334
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 340--341
  [] 
  []
 
-[23]
+[14]
 File: ex3/jacobi/jacobi1_time_lin.eps Graphic file (type eps)
  <ex3/jacobi/jacobi1_time_lin.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 343--344
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 350--351
  [] 
  []
 
-[24]
+[15]
 File: ex3/jacobi/jacobi1_time_log.eps Graphic file (type eps)
  <ex3/jacobi/jacobi1_time_log.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 352--354
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 359--361
  [] 
  []
 
-[25] (./../computer-experiments/exercise/linear_system/pointer.c [26] [27])
-[28]
+[16] (./../computer-experiments/exercise/linear_system/pointer.c [17] [18])
+[19]
 File: pointer.txt  (verbatim)
 
-Overfull \hbox (148.29884pt too wide) in paragraph at lines 485--485
+Overfull \hbox (148.29884pt too wide) in paragraph at lines 492--492
 []   \OT1/cmtt/m/n/10 0.00000    1.00000    2.00000    3.00000    4.00000    5.
 00000    6.00000    7.00000    8.00000    9.00000[] 
  []
 
 
-Overfull \hbox (148.29884pt too wide) in paragraph at lines 485--485
+Overfull \hbox (148.29884pt too wide) in paragraph at lines 492--492
 []   \OT1/cmtt/m/n/10 0.00000    1.00000    2.00000    3.00000    4.00000    5.
 00000    6.00000    7.00000    8.00000    9.00000[] 
  []
 
 
-Overfull \hbox (148.29884pt too wide) in paragraph at lines 485--485
+Overfull \hbox (148.29884pt too wide) in paragraph at lines 492--492
 [] \OT1/cmtt/m/n/10 100.00000  101.00000  102.00000  103.00000  104.00000  105.
 00000  106.00000  107.00000  108.00000  109.00000[] 
  []
 
 
-Overfull \hbox (148.29884pt too wide) in paragraph at lines 485--485
+Overfull \hbox (148.29884pt too wide) in paragraph at lines 492--492
 [] \OT1/cmtt/m/n/10 200.00000  201.00000  202.00000  203.00000  204.00000  205.
 00000  206.00000  207.00000  208.00000  209.00000[] 
  []
 
 
-Overfull \hbox (148.29884pt too wide) in paragraph at lines 485--485
+Overfull \hbox (148.29884pt too wide) in paragraph at lines 492--492
 [] \OT1/cmtt/m/n/10 300.00000  301.00000  302.00000  303.00000  304.00000  305.
 00000  306.00000  307.00000  308.00000  309.00000[] 
  []
 
 
-Overfull \hbox (148.29884pt too wide) in paragraph at lines 485--485
+Overfull \hbox (148.29884pt too wide) in paragraph at lines 492--492
 [] \OT1/cmtt/m/n/10 400.00000  401.00000  402.00000  403.00000  404.00000  405.
 00000  406.00000  407.00000  408.00000  409.00000[] 
  []
 
 
-Overfull \hbox (148.29884pt too wide) in paragraph at lines 485--485
+Overfull \hbox (148.29884pt too wide) in paragraph at lines 492--492
 [] \OT1/cmtt/m/n/10 500.00000  501.00000  502.00000  503.00000  504.00000  505.
 00000  506.00000  507.00000  508.00000  509.00000[] 
  []
 
 
-Overfull \hbox (148.29884pt too wide) in paragraph at lines 485--485
+Overfull \hbox (148.29884pt too wide) in paragraph at lines 492--492
 [] \OT1/cmtt/m/n/10 600.00000  601.00000  602.00000  603.00000  604.00000  605.
 00000  606.00000  607.00000  608.00000  609.00000[] 
  []
 
 
-Overfull \hbox (148.29884pt too wide) in paragraph at lines 485--485
+Overfull \hbox (148.29884pt too wide) in paragraph at lines 492--492
 [] \OT1/cmtt/m/n/10 700.00000  701.00000  702.00000  703.00000  704.00000  705.
 00000  706.00000  707.00000  708.00000  709.00000[] 
  []
 
 
-Overfull \hbox (148.29884pt too wide) in paragraph at lines 485--485
+Overfull \hbox (148.29884pt too wide) in paragraph at lines 492--492
 [] \OT1/cmtt/m/n/10 800.00000  801.00000  802.00000  803.00000  804.00000  805.
 00000  806.00000  807.00000  808.00000  809.00000[] 
  []
 
 
-Overfull \hbox (148.29884pt too wide) in paragraph at lines 485--485
+Overfull \hbox (148.29884pt too wide) in paragraph at lines 492--492
 [] \OT1/cmtt/m/n/10 900.00000  901.00000  902.00000  903.00000  904.00000  905.
 00000  906.00000  907.00000  908.00000  909.00000[] 
  []
 
-[29] [30] (./ex3/gauss_seidel/gauss_seidel.c [31] [32] [33] [34] [35])
-(./ex3/sor/sor.c [36] [37] [38] [39] [40])
+[20] [21] (./ex3/gauss_seidel/gauss_seidel_rep.c [22]) (./ex3/sor/sor_rep.c
+[23])
 File: ex3/gauss_seidel/gauss10.eps Graphic file (type eps)
  <ex3/gauss_seidel/gauss10.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 521--522
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 528--529
  [] 
  []
 
-[41]
 File: ex3/gauss_seidel/gauss30.eps Graphic file (type eps)
- <ex3/gauss_seidel/gauss30.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 529--530
+<ex3/gauss_seidel/gauss30.eps>
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 536--537
  [] 
  []
 
-[42]
+[24]
 File: ex3/gauss_seidel/gauss1_linear.eps Graphic file (type eps)
  <ex3/gauss_seidel/gauss1_linear.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 539--540
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 546--547
  [] 
  []
 
-[43]
+[25]
 File: ex3/sor/gauss_sor100.eps Graphic file (type eps)
  <ex3/sor/gauss_sor100.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 553--554
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 560--561
  [] 
  []
 
-[44]
+[26]
 File: ex3/sor/gauss_sor150.eps Graphic file (type eps)
  <ex3/sor/gauss_sor150.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 563--564
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 570--571
  [] 
  []
 
-[45]
+[27]
 File: ex3/sor/parameter.eps Graphic file (type eps)
  <ex3/sor/parameter.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 584--586
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 591--593
  [] 
  []
 
-[46]
+[28]
 File: ex3/sor/sor173.eps Graphic file (type eps)
  <ex3/sor/sor173.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 596--597
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 603--604
  [] 
  []
 
-[47]
+[29]
 File: ex3/sor/gauss_sor80.eps Graphic file (type eps)
  <ex3/sor/gauss_sor80.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 615--616
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 622--623
  [] 
  []
 
-[48]
+[30]
 File: ex3/sor/sor220.eps Graphic file (type eps)
  <ex3/sor/sor220.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 627--628
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 634--635
  [] 
  []
 
-[49]
+[31]
 File: ex3/sor/sor20.eps Graphic file (type eps)
  <ex3/sor/sor20.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 645--646
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 652--653
  [] 
  []
 
-[50]
+[32]
 File: ex3/sor/jacobi_gauss_sor.eps Graphic file (type eps)
  <ex3/sor/jacobi_gauss_sor.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 658--659
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 665--666
  [] 
  []
 
-[51] (./ex4/power_iteration/power_iteration.c [52] [53] [54])
+[33] (./ex4/power_iteration/power_iteration.c [34] [35] [36])
 File: ex4/power_iteration/power.eps Graphic file (type eps)
 
 <ex4/power_iteration/power.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 704--705
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 711--712
  [] 
  []
 
-[55]
+[37]
 File: ex4/regression_analysis/fit_2.eps Graphic file (type eps)
  <ex4/regression_analysis/fit_2.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 736--738
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 743--745
  [] 
  []
 
-[56]
+[38]
 File: ex4/regression_analysis/fit_10.eps Graphic file (type eps)
  <ex4/regression_analysis/fit_10.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 745--750
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 752--757
  [] 
  []
 
 
-Underfull \hbox (badness 2689) in paragraph at lines 750--750
+Underfull \hbox (badness 2689) in paragraph at lines 757--757
  []\JY1/mc/m/n/9 図 \OT1/cmr/m/n/9 25 10 \JY1/mc/m/n/9 次の多項式によるフ ィ ッ
 テ ィング 。 具体的な関数形は $\OT1/cmr/m/n/9 0\OML/cmm/m/it/9 :\OT1/cmr/m/n/9 
 588516023906752 + 
  []
 
-[57]
+[39]
 File: ex4/regression_analysis/fit_15.eps Graphic file (type eps)
  <ex4/regression_analysis/fit_15.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 757--759
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 764--766
  [] 
  []
 
-[58] [59]
+[40] [41]
 File: ex4/regression_analysis/test1.eps Graphic file (type eps)
  <ex4/regression_analysis/test1.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 810--811
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 817--818
  [] 
  []
 
 File: ex4/regression_analysis/test2.eps Graphic file (type eps)
 <ex4/regression_analysis/test2.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 819--820
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 826--827
  [] 
  []
 
-[60]
+[42]
 File: ex4/regression_analysis/test3.eps Graphic file (type eps)
  <ex4/regression_analysis/test3.eps>
-Overfull \hbox (32.52545pt too wide) in paragraph at lines 828--829
+Overfull \hbox (32.52545pt too wide) in paragraph at lines 835--836
  [] 
  []
 
-[61] [62] (./svd_sample.txt) [63] [64] (./report_2.aux) ) 
+[43] [44] (./svd_sample.txt) [45]
+
+LaTeX Warning: Empty `thebibliography' environment on input line 934.
+
+[46] (./report_2.aux) ) 
 Here is how much of TeX's memory you used:
- 11607 strings out of 494004
- 199587 string characters out of 6157310
- 507449 words of memory out of 5000000
- 14766 multiletter control sequences out of 15000+600000
+ 11568 strings out of 494004
+ 199254 string characters out of 6157310
+ 506452 words of memory out of 5000000
+ 14730 multiletter control sequences out of 15000+600000
  17764 words of font info for 81 fonts, out of 8000000 for 9000
  750 hyphenation exceptions out of 8191
- 55i,8n,57p,811b,1627s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,13n,57p,811b,1627s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on report_2.dvi (64 pages, 600924 bytes).
+Output written on report_2.dvi (46 pages, 278160 bytes).

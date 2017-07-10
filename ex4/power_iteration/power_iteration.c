@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
   int m, n, r;
   double **a;
   double *v, *c, *temp;
-  double theo, eigen_value, diff, mother, child;
+  double theo, eigen_value, temp_value, diff, mother, child;
 
 
   if (argc < 2) {
@@ -79,8 +79,9 @@ int main(int argc, char** argv) {
   for(i=0;i<n;i++){
     child  += c[i] * c[i];
   }
+  temp_value = eigen_value;
   eigen_value = child / mother;
-  diff = fabs(eigen_value - theo);
+  diff = fabs(eigen_value - temp_value);
   	printf("%d %20.15lf\n", l+1, eigen_value);
   l += 1;
   }while((diff > epsilon) && (l < LMAX));

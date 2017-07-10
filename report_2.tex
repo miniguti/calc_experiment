@@ -174,11 +174,11 @@ LU分解すると言っても自分が計算するわけではなく、LAPACKのdgetrf関数を用いたので、
 \]
 とP、L、Uそれぞれの行列式の積である。
 
-\begin{array}
+\begin{align}
 \det P = (-1)^n \ \ \ \ \ \text{$n$は行置換の回数} \notag \\
 \det L = 1 \notag \\
 \det U = trU \notag
-\end{array}
+\end{align}
 
 detPは行置換の回数が分かれば求められる。これにはdgetrf関数の出力であるIPIVを見ればよい。
 例えば今回の場合、
@@ -206,13 +206,18 @@ dgetrf関数から出力された行列の対角成分はUの対角成分なので、この対角成分の積を
 \subsection{実験概要}
 LU分解を用いてDirichlet境界条件の下での二次元Laplace方程式の解を求めるプログラムを作成した。
 
-\lstinputlisting[basicstyle=\ttfamily, frame=single, caption=Laplace方程式を解くための行列を求めるプログラム]
-{./ex3/laplace_lu/laplace.c}
+
+詳しくは述べないが、Laplace方程式を差分で表して連立方程式としたときの係数行列など(いわゆるAとb)を別途計算し、
+その行列とベクトルを次のプログラムに入力した。
+
 
 \lstinputlisting[basicstyle=\ttfamily, frame=single, caption=LU分解でLaplace方程式の解を求めるプログラム]
-{./ex3/laplace_lu/laplace_solve.c}
+{./ex3/laplace_lu/laplace_solve_rep.c}
 
-このプログラムを用いていくつかのメッシュ数で解の形と解の計算にかかった時間を記載した。
+このプログラムにより各格子点におけるuの値が計算される。
+LAPACKのパッケージを用いて計算するだけなので特に工夫したところはない。
+
+その結果から、いくつかのメッシュ数で解の形と解の計算にかかった時間を記載した。
 
 また解の計算にかかった時間がメッシュ数を増やしていくとどのように変わるかをグラフで分かりやすく示した。
 
@@ -299,7 +304,7 @@ u(0, y) = \sin{\pi y}, u(x, 0) = u(x, 1) = u(1, y) = 0
 
 Laplace方程式の境界値問題をjacobi法で解くプログラムを作成した。
 \lstinputlisting[basicstyle=\ttfamily, frame=single, caption=jacobi法でLaplace方程式を解くプログラム]
-{./ex3/jacobi/jacobi.c}
+{./ex3/jacobi/jacobi_rep.c}
 
 まず適当なメッシュの数での計算結果から得られた解をプロットした。
 
@@ -497,12 +502,12 @@ Laplace方程式の境界値問題をGauss-Seidel法、SOR法で解くプログラムを作成した。
 まず、Gauss-Seidel法のプログラムである。
 
 \lstinputlisting[basicstyle=\ttfamily, frame=single, caption=jacobi法でLaplace方程式を解くプログラム]
-{./ex3/gauss_seidel/gauss_seidel.c}
+{./ex3/gauss_seidel/gauss_seidel_rep.c}
 
 次にSOR法のプログラムである。
 
 \lstinputlisting[basicstyle=\ttfamily, frame=single, caption=jacobi法でLaplace方程式を解くプログラム]
-{./ex3/sor/sor.c}
+{./ex3/sor/sor_rep.c}
 
 
 まずGauss-Seidel法について、jacobi法について行ったのと同様の実験をした。
@@ -688,7 +693,7 @@ $\omega = 1.50$、$n=20$の時の解の形は次のようになった。
 成分が$v_{ij}=min(i, j)(1 \leq i \leq n, 1 \leq j \leq n)のn \times n 対称行列の固有値を求めた。$
 
 \lstinputlisting[basicstyle=\ttfamily, frame=single, caption=べき乗法により行列の最大固有値を計算するプログラム]
-{./ex4/power_iteration/power_iteration.c}
+{./ex4/power_iteration/power_iteration_rep.c}
 
 
 \subsection{実験結果}
@@ -919,18 +924,14 @@ $V^{T}$が書き込まれるところにuを書いておけば、正しくu、vtが得られることになる。
 
 
 
+
+
+
 \subsection{実験結果}
 
 \subsection{考察}
 
 \begin{thebibliography}{9}
-
-\item
- 増原英彦+東京大学情報教育連絡会『情報科学入門 Rubyを使って学ぶ』(東京大学出版会, 2010)
-
-
-\item
- \url{http://www.cp.cmc.osaka-u.ac.jp/~kikuchi/texts/conservation.pdf}
 
 
 \end{thebibliography}
