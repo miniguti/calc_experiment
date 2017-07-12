@@ -270,7 +270,7 @@ u(0, y) = \sin{\pi y}, u(x, 0) = u(x, 1) = u(1, y) = 0
 
 次に計算時間の変化を調べた。
 計算時間と言ってもどこからどこまでの処理時間をとるかは様々である。
-ここではプログラムの行列をLU分解して解を得るところまでを測定した。
+ここではプログラムの行列をLU分解して解を得る処理時間を測定した。
 測定はc言語のtime.hをインクルードしてclock()関数を用いた。
 
 \begin{figure}[H]
@@ -512,9 +512,9 @@ Laplace方程式の境界値問題をGauss-Seidel法、SOR法で解くプログラムを作成した。
 
 まずGauss-Seidel法について、jacobi法について行ったのと同様の実験をした。
 
-次にSOR法について、かなり詳しく修正パラメータと反復回数の関係を調べた。
+次にSOR法について、修正パラメータと反復回数の関係を調べた。
 
-また最後に、jacobi法、gauss-seidel法、いくつかの修正パラメータでのSOR法の計算速度(反復回数)の比較をした。
+また最後に、jacobi法、gauss-seidel法、いくつかの修正パラメータでのSOR法の反復回数の比較をした。
 
 \subsection{実験結果}
 
@@ -680,7 +680,18 @@ $\omega = 1.50$、$n=20$の時の解の形は次のようになった。
 
 \subsection{実験概要}
 
+ガウスの消去法のプログラム(gauss.c)、標準LAPACKを使ったLU分解(lu_decomp.c)、
+MKLを使ったLU分解(lu_decomp.c)の計算速度を比較した。
+
+用いた連立一次方程式は基本課題EX3-2、3-3で用いたLaplace方程式のものを用いた。
+
+計算速度は行列をLU分解し、解を得るところまでを測定した。
+
+
 \subsection{実験結果}
+
+
+
 
 \subsection{考察}
 
@@ -856,7 +867,12 @@ Lanczos 法により固有値を計算するプログラムを作成した。
 
 
 
+
+
 \subsection{実験結果}
+
+
+
 
 \subsection{考察}
 
@@ -864,7 +880,7 @@ Lanczos 法により固有値を計算するプログラムを作成した。
 
 \subsection{実験概要}
 
-特異値分解のサンプルプログラム(svd.c)をコンパイルし、入力matrix2.datを用いて
+特異値分解のサンプルプログラム(svd.c)をコンパイルし、入力matrix2.datに対して
 プログラムを実行した。
 
 
@@ -880,8 +896,6 @@ Lanczos 法により固有値を計算するプログラムを作成した。
 講義L4の例が再現されていることが確認できた。(有効桁数は異なるが)
 
 
-
-\subsection{考察}
 
 \section{応用課題EX4-3}
 
@@ -938,8 +952,8 @@ $V^{T}$が書き込まれるところにuを書いておけば、正しくu、vtが得られることになる。
 \subsection{考察}
 
 \begin{thebibliography}{9}
-
-
+\item
+\url{http://www.cms-initiative.jp/ja/events/0627yamamoto.pdf}
 \end{thebibliography}
 
 \end{document}
