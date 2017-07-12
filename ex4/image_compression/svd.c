@@ -17,6 +17,7 @@ int main(int argc, char** argv) {
   int i, j, k;
 
   int m, n, r;
+  int rank;
   double **a, **u, **vt;
   double *s;
 
@@ -76,8 +77,11 @@ int main(int argc, char** argv) {
   printf("Reconstruction of the original matrix A:\n");
   fprint_dmatrix(stdout, m, n, a);
 
-  // approximate A by rank (r-1) matrix
-  s[r-1] = 0.0; // set the last singular value to zero
+  // approximate A by rank k( < r) matrix
+  rank = 2;
+  for(i = 0;i < rank;i++){
+    s[r - 1 - i] = 0.0;
+  }
   for (i = 0; i < m; ++i) {
     for (j = 0; j < n; ++j) {
       a[i][j] = 0.0;
@@ -86,7 +90,7 @@ int main(int argc, char** argv) {
       }
     }
   }
-  printf("Rank (r-1) approximation of A:\n");
+  printf("Rank %d( < r) approximation of A:\n", r - rank);
   fprint_dmatrix(stdout, m, n, a);
 
   free_dmatrix(a);

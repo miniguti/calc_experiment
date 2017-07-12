@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define LMAX 1000
 #define epsilon pow(10, -3)
@@ -21,7 +22,7 @@ int main(int argc, char** argv) {
   double **a;
   double *v, *c, *temp;
   double theo_1, theo_2, eigen_value, temp_eigen_value, diff, mother, child;
-
+  clock_t start, end;
 
   for(n=1;n<NMAX;n++){
 
@@ -50,7 +51,7 @@ int main(int argc, char** argv) {
   for(i=0;i<n;i++){
     c[i] = v[i];
   }
-
+  start = clock();
   /* perform power iteration */
   l = 0;
   do{
@@ -81,8 +82,9 @@ int main(int argc, char** argv) {
   //printf("%d %20.15lf %lf\n", l+1, eigen_value, theo_1);
   l += 1;
   }while((diff > epsilon) && (l < LMAX));
-  	if(n % 10 == 0){
-	printf("%d %d %lf %lf %lf %lf\n", n, l, theo_1 ,theo_1 / theo_2, eigen_value, 1.0 / log(theo_1/theo_2));
+  end = clock();
+  if(n % 10 == 0){
+    printf("%d %d %lf %lf %lf %lf\n", n, l, theo_1 ,theo_1 / theo_2, eigen_value, 1.0 / log(theo_1/theo_2));
   }
   }
 /*

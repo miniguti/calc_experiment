@@ -6,8 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define LMAX 2000
-#define epsilon pow(10, -5)
+#define LMAX 1000
+#define epsilon pow(10, -7)
 
 int imin(int x, int y) { return (x < y) ? x : y; }
 int imax(int x, int y) { return (x > y) ? x : y; }
@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
   int m, n, r;
   double **a;
   double *v, *c, *temp;
-  double theo, eigen_value, temp_value, diff, mother, child;
+  double v_norm, theo, eigen_value, temp_value, diff, mother, child;
 
 
   if (argc < 2) {
@@ -36,8 +36,8 @@ int main(int argc, char** argv) {
     exit(1);
   }
   read_dmatrix(fp, &m, &n, &a);
-  printf("Matrix A:\n");
-  fprint_dmatrix(stdout, m, n, a);
+  //printf("Matrix A:\n");
+  //fprint_dmatrix(stdout, m, n, a);
 
   /* allocate matrices and vectors */
   v = alloc_dvector(n);
@@ -49,10 +49,14 @@ int main(int argc, char** argv) {
 
   /* initial value of vector v */
   for(i=0;i<n;i++){
-  	v[i] = 0.1 * (i+1);
+  	v[i] = i + 1;
   }
+	for(i = 0;i < n;i++){
+		v_norm += pow(v[i], 2);
+	}
+	v_norm = pow(v_norm, 0.5);
   for(i=0;i<n;i++){
-    c[i] = v[i];
+    c[i] = v[i] / v_norm;
   }
 
   /* perform power iteration */
@@ -88,22 +92,8 @@ int main(int argc, char** argv) {
 
 
 
-	printf("theoretical value is %lf\n", theo);
-/*
-  //行列Aの出力
-	
-	printf("%d %d\n", n, n); //サイズの出力
-	
-	for (i = 0;i < n;i++){
-		for (j = 0;j < n;j++){
-			if(j < n - 1){
-				printf("%lf ", a[i][j]);
-			}else{
-				printf("%lf\n", a[i][j]);
-			}
-		}
-	}
-*/
+	//printf("theoretical value is %lf\n", theo);
+
   free_dmatrix(a);
   free_dvector(v);
   free_dvector(c);
