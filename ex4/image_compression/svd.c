@@ -40,8 +40,8 @@ int main(int argc, char** argv) {
     exit(1);
   }
   read_dmatrix(fp, &m, &n, &a);
-  printf("Matrix A:\n");
-  fprint_dmatrix(stdout, m, n, a);
+  //printf("Matrix A:\n");
+  //fprint_dmatrix(stdout, m, n, a);
 
   /* allocate matrices and vectors */
   r = imin(m, n);
@@ -58,12 +58,12 @@ int main(int argc, char** argv) {
     fprintf(stderr, "Error: LAPACK::dgesvd failed\n");
     exit(1);
   }
-  printf("Result of SVD U:\n");
+  /*printf("Result of SVD U:\n");
   fprint_dmatrix(stdout, m, r, u);
   printf("Result of SVD S:\n");
   fprint_dvector(stdout, r, s);
   printf("Result of SVD Vt:\n");
-  fprint_dmatrix(stdout, r, n, vt);
+  fprint_dmatrix(stdout, r, n, vt); */
 
   // check the result of SVD
   for (i = 0; i < m; ++i) {
@@ -74,11 +74,11 @@ int main(int argc, char** argv) {
       }
     }
   }
-  printf("Reconstruction of the original matrix A:\n");
-  fprint_dmatrix(stdout, m, n, a);
+  //printf("Reconstruction of the original matrix A:\n");
+  //fprint_dmatrix(stdout, m, n, a);
 
   // approximate A by rank k( < r) matrix
-  rank = 2;
+  rank = 278;
   for(i = 0;i < rank;i++){
     s[r - 1 - i] = 0.0;
   }
@@ -90,8 +90,17 @@ int main(int argc, char** argv) {
       }
     }
   }
-  printf("Rank %d( < r) approximation of A:\n", r - rank);
+  //printf("Rank %d( < r) approximation of A:\n", r - rank);
   fprint_dmatrix(stdout, m, n, a);
+    for (i = 0;i < m;i++){
+    for (j = 0;j < n;j++){
+      if(j < n - 1){
+        printf("%lf ", a[i][j]);
+      }else{
+        printf("%lf\n", a[i][j]);
+      }
+    }
+  }
 
   free_dmatrix(a);
   free_dmatrix(u);
